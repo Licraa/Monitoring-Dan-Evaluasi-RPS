@@ -1,0 +1,171 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.dashboard-container {
+    display: flex;
+    background-color: rgb(214, 214, 214);
+}
+
+.dashboard-container.sidebar-collapsed .admin-info {
+    left: 0; /* Membuat admin-info mulai dari tepi kiri jendela */
+    width: 100%; /* Lebar penuh */
+}
+
+.dashboard-container.sidebar-collapsed .main-content {
+    margin-left: 0; /* Menghapus margin kiri */
+    width: 100%; /* Lebar penuh */
+}
+
+.toggle-sidebar {
+    font-size: 1.5rem; /* Sesuaikan ukuran ikon */
+    cursor: pointer;
+    margin-right: 20px;
+    color: white;
+}
+
+.sidebar-collapsed .sidebar {
+    transform: translateX(-250px); /* Sembunyikan sidebar */
+}
+
+.sidebar-collapsed .admin-info {
+    left: 0; /* Pindahkan admin-info ke ujung kiri jendela */
+}
+
+.sidebar {
+    width: 250px;
+    background-color: #f8f9fa;
+    position: fixed;
+    height: 100vh;
+    transition: transform 0.3s ease; 
+}
+
+.sidebar-header-judul {
+    background-image: repeating-linear-gradient(135deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 2px,transparent 2px, transparent 4px),linear-gradient(45deg, rgb(18, 105, 233),rgb(30,111,219));
+    width: 105%; /* Lebar penuh mengikuti sidebar */
+    height: 61px; /* Tinggi yang sama dengan admin-info */
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Rata tengah secara horizontal */
+    background-color: #e9ecef; /* Warna latar opsional */
+    font-weight: bold;
+    border-bottom: 1px solid #ddd; /* Opsional, untuk pemisah */
+}
+
+.sidebar-header-judul p {
+    margin-top: 20px;
+    color: white;
+}
+
+.sidebar-header {
+    padding: 15px;
+    font-weight: bold;
+    color: #333;
+}
+
+.sidebar-header p{
+    font-size: 15px;
+    margin-top: 0px;
+    text-align: center;
+}
+
+.menu-item {
+    display: block;
+    padding: 12px 20px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.menu-item:hover,
+.menu-item.active {
+    background-color: #f0ad4e;
+    color: white;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-toggle {
+    cursor: pointer;
+    display: block;
+    color: #333;
+    padding: 12px 20px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-toggle:hover {
+    background-color: #f0ad4e;
+    color: white;
+}
+
+.dropdown-menu {
+    display: none;
+    flex-direction: column;
+    background-color: #f8f9fa;
+}
+
+.dropdown-menu a {
+    padding: 10px 30px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.main-content {
+    margin-left: 250px;
+    margin-top: 40px; 
+    padding: 20px;
+    width: calc(100% - 250px);
+    transition: margin-left 0.3s ease;
+}
+
+.main-header {
+    padding: 20px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.main-header h1 {
+    font-size: 1rem; 
+    margin: 0; 
+}
+
+.card {
+    margin-bottom: 20px;
+}
+
+.admin-info {
+    background-image: repeating-linear-gradient(135deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 2px,transparent 2px, transparent 4px),linear-gradient(45deg, rgb(18, 105, 233),rgb(166, 255, 155));
+    position: fixed;
+    top: 0;
+    left: 250px; /* Mulai dari tepi kanan sidebar */
+    right: 0; /* Sampai ke ujung kanan jendela */
+    height: 60px; /* Atur tinggi sesuai kebutuhan */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    background-color: #f8f9fa;
+    transition: left 0.3s ease;
+}
+
+.admin-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-left: auto;
+    color: rgb(25, 58, 245);
+}
+
+.profile-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-left: 10px;
+}

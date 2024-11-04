@@ -1,0 +1,155 @@
+/* styles.css */
+
+/* Reset dasar untuk margin dan padding */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Styling untuk body */
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+}
+
+/* Styling untuk sidebar navigasi */
+.sidebar {
+  width: 220px;
+  background-color: #343a40;
+  color: white;
+  padding: 20px;
+  height: 100vh;
+  position: fixed;
+}
+
+.sidebar h4 {
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+}
+
+.sidebar a {
+  color: #cfd2d6;
+  text-decoration: none;
+  display: block;
+  padding: 10px 0;
+  font-size: 1.1rem;
+  transition: color 0.3s;
+}
+
+.sidebar a:hover {
+  color: #f8f9fa;
+}
+
+.sidebar a.active {
+  color: #007bff;
+  font-weight: bold;
+}
+
+/* Styling untuk main content */
+.main-content {
+  margin-left: 240px;
+  padding: 20px;
+  width: calc(100% - 240px);
+  background-color: #f7f8fa;
+}
+
+/* Styling untuk header */
+.header {
+  margin-bottom: 20px;
+  background-color: #007bff;
+  color: white;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.header h2 {
+  margin-bottom: 5px;
+  font-size: 1.8rem;
+}
+
+/* Section styling */
+.section {
+  margin-bottom: 30px;
+}
+
+.section h4 {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.section p {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* Card styling untuk ringkasan laporan */
+.card {
+  border: none;
+  border-radius: 8px;
+  background-color: #f1f1f1;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.card .card-title {
+  font-size: 1.3rem;
+  margin-bottom: 10px;
+  color: #007bff;
+}
+
+/* Tabel styling */
+.table {
+  margin-top: 20px;
+}
+
+.table th {
+  background-color: #007bff;
+  color: white;
+  text-align: center;
+}
+
+.table td,
+.table th {
+  padding: 10px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Tombol download di tabel */
+.btn-primary {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+/* Styling untuk radio buttons pada Unsur RPS */
+.table-bordered td {
+  vertical-align: middle;
+}
+
+label {
+  margin: 0 10px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+  }
+}
