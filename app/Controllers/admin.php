@@ -2,68 +2,50 @@
 
 namespace App\Controllers;
 
-use App\Models\UserModel;
-use CodeIgniter\Controller;
-
-class UserController extends Controller
+class Admin extends BaseController
 {
-    protected $userModel;
-
-    public function __construct()
+    public function index(): string
     {
-        $this->userModel = new UserModel();
+        return view('admin-db/admin');
     }
 
-    public function index()
+    public function akun(): string
     {
-        $data['users'] = $this->userModel->getUserWithRole();
-        return view('admin/user_list', $data);
+        return view('admin-db/akun');
     }
 
-    public function create()
+    public function rps(): string
     {
-        return view('admin/user_create');
+        return view('admin-db/rps');
     }
 
-    public function store()
+    public function tambah(): string
     {
-        $data = [
-            'username' => $this->request->getPost('username'),
-            'email' => $this->request->getPost('email')
-        ];
-        
-        $this->userModel->addUser($data);
-
-        // Here you should also assign a role using Myth Auth
-        // ...
-
-        return redirect()->to('/admin/users');
+        return view('admin-db/tambah');
     }
 
-    public function edit($id)
+    public function edit(): string
     {
-        $data['user'] = $this->userModel->find($id);
-        return view('admin/user_edit', $data);
+        return view('admin-db/edit');
     }
 
-    public function update($id)
+    public function tambahrp(): string
     {
-        $data = [
-            'username' => $this->request->getPost('username'),
-            'email' => $this->request->getPost('email')
-        ];
-
-        $this->userModel->updateUser($id, $data);
-
-        // Here you should also update the role if necessary
-        // ...
-
-        return redirect()->to('/admin/users');
+        return view('admin-db/tambahrp');
     }
 
-    public function delete($id)
+    public function editrp(): string
     {
-        $this->userModel->deleteUser($id);
-        return redirect()->to('/admin/users');
+        return view('admin-db/editrp');
+    }
+    
+    public function profil(): string
+    {
+        return view('admin-db/profil');
+    }
+
+    public function notif(): string
+    {
+        return view('admin-db/notif');
     }
 }
