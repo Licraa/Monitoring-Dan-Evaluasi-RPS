@@ -12,4 +12,12 @@ class Dashboard extends BaseController
     {
         return view('dashboard/dashboard_gpm');
     }
+    public function admin()
+    {
+        return view('dashboard/dashboard_admin');
+    }
+    public function kajur()
+    {
+        return view('dashboard/dashboard_kajur');
+    }
 }

@@ -100,6 +100,10 @@ class AuthController extends Controller
             return redirect()->to('/dashboard/dashboard_Dosen');
         } elseif ($authorization->inGroup('gpm', $userId)) {
             return redirect()->to('/dashboard/dashboard_gpm');
+        } elseif ($authorization->inGroup('admin', $userId)) {
+            return redirect()->to('/dashboard/dashboard_admin');
+        } elseif ($authorization->inGroup('kajur', $userId)) {
+            return redirect()->to('/dashboard/dashboard_kajur');
         }
 
         $redirectURL = session('redirect_url') ?? site_url('/');

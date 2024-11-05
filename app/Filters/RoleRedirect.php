@@ -37,6 +37,10 @@ class RoleRedirect implements FilterInterface
                 return redirect()->to('/dosen');
             } elseif ($role === 'gpm') {
                 return redirect()->to('/gpm');
+            } elseif ($role === 'admin') {
+                return redirect()->to('/admin');
+            } elseif ($role === 'kajur') {
+                return redirect()->to('/kajur');
             }
         }
     }

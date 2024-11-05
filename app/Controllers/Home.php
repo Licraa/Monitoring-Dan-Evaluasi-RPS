@@ -21,12 +21,16 @@ class Home extends BaseController
                 return redirect()->to('/dashboard/dashboard_dosen');
             } elseif ($user->inGroup('gpm')) {
                 return redirect()->to('/dashboard/dashboard_gpm');
+            } elseif ($user->inGroup('admin')) {
+                return redirect()->to('/dashboard/dashboard_admin');
+            } elseif ($user->inGroup('kajur')) {
+                return redirect()->to('/dashboard/dashboard_kajur');
             } else {
                 // Jika pengguna tidak punya grup sesuai, arahkan ke halaman default
                 return redirect()->to('/default_dashboard');
             }
+            
         }
-
         // Jika pengguna belum login, arahkan ke halaman login
         return redirect()->to('/login');
     }
