@@ -1,6 +1,7 @@
 <?php
 
 use CodeIgniter\Router\RouteCollection;
+use Kint\Zval\Value;
 
 /**
  * @var RouteCollection $routes
@@ -17,6 +18,8 @@ $routes->get('rps', 'Admin::rps');
 $routes->get('tambah', 'Admin::tambah');
 $routes->get('edit', 'Admin::edit');
 $routes->get('tambahrp', 'Admin::tambahrp');
+$routes->post('tambahrp/addrp', 'Admin::addrp');
+$routes->get('editrp', 'Admin::editrp');
 $routes->get('editrp', 'Admin::editrp');
 $routes->get('profil', 'Admin::profil');
 $routes->get('notif', 'Admin::notif');

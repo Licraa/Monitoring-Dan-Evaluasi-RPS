@@ -59,18 +59,23 @@
         <div class="main-content">
 
             <header class="main-header">
-                <h1 class="h4"><a href="<?= site_url('/'); ?>">Home</a> / <a href="<?= site_url('rps'); ?>">Kelola RPS</a> / Edit Unsur</h1>
+                <h1 class="h4"><a href="<?= site_url('/admindb'); ?>">Home</a> / <a href="<?= site_url('rps'); ?>">Kelola RPS</a> / Edit Unsur</h1>
             </header>
             <div class="form-container">
-                <form id="userForm">
-                    <label>Nama Unsur:</label>
-                    <input type="text" required>
+                <form action="<?=site_url('rps/editrp') ?>" id="userForm" method="post" autocomplete="off">
+                <?= csrf_field()  ?>
+                <div class="form-group">
+                    <label>Nama Unsur :</label>
+                    <input type="text" name="unsur" class="form-control" require autofocus>
+                </div>
 
-                    <label>Pilihan:</label>
-                    <input type="text" required>
-
-                    <button class="but" type="submit" id="saveButton">Simpan</button>
-                </form>
+                <div class="form-group">
+                    <label>keterangan :</label>
+                    <input type="text" name="keterangan" class="form-control" require autofocus>
+                </div>
+                <div>
+                    <button  type="submit" class="btn btn-success"><i class=" fas fa-papper-plane"></i> save</button>
+                </div>
             </div>
         </div>
     </div>
