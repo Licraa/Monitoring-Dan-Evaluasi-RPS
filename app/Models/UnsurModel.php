@@ -7,12 +7,12 @@ use CodeIgniter\Model;
 class UnsurModel extends Model
 {
     protected $table            = 'unsur_rps';
-    protected $primaryKey       = 'id';
+    protected $primaryKey       = 'id_unsur';
     // protected $useAutoIncrement = true;
     protected $returnType       = 'object';
     // protected $useSoftDeletes   = false;
     // protected $protectFields    = true;
-    protected $allowedFields    = ['unsur', 'keterangan'];
+    protected $allowedFields    = [ 'unsur', 'keterangan'];
 
     public function getAllUnsur()
     {

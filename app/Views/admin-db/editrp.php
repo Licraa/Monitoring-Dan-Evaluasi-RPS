@@ -62,7 +62,7 @@
                 <h1 class="h4"><a href="<?= site_url('/admindb'); ?>">Home</a> / <a href="<?= site_url('rps'); ?>">Kelola RPS</a> / Edit Unsur</h1>
             </header>
             <div class="form-container">
-                <form action="<?=site_url('rps/editrp') ?>" id="userForm" method="post" autocomplete="off">
+                <form action="<?= site_url('editrp/updaterp/' . $unsurs->id_unsur) ?>" id="userForm" method="post" autocomplete="off">
                 <?= csrf_field()  ?>
                 <div class="form-group">
                     <label>Nama Unsur :</label>

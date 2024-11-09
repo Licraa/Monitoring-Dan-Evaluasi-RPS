@@ -62,15 +62,39 @@ class Admin extends BaseController
     }
 
     
-    public function editrp($id = null): string
+    public function editrp($id = null)
     {
         $data ['unsurs'] = $this ->unsur->where('id_unsur', $id)->first();
         return view('admin-db/editrp', $data);
     }
 
-    public function updaterp(): string
+    public function updaterp($id = null)
     {
-        return view('admin-db/editrp');
+        $data = [
+            'unsur' => $this->request->getPost('unsur'),
+            'keterangan'=> $this->request->getPost('keterangan')
+        ]; 
+        if ($this->validate([
+            'unsur' => 'required',
+            'keterangan' => 'required'
+        ])) {
+                // Update data berdasarkan ID
+                $this->unsur->update($id, $data);
+
+            // Redirect atau tampilkan pesan sukses
+            return redirect()->to('/rps')->with('message', 'Data berhasil diperbaharui');
+        } else {
+            // Jika validasi gagal
+            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+        }
+    }
+
+
+    public function deleterp($id = null)
+    {
+        $this ->unsur->where('id_unsur', $id)->delete();
+            // Redirect atau tampilkan pesan sukses
+            return redirect()->to('/rps')->with('message', 'Data berhasil dihapus');
     }
     
     public function profil(): string

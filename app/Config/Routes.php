@@ -20,7 +20,9 @@ $routes->get('edit', 'Admin::edit');
 $routes->get('tambahrp', 'Admin::tambahrp');
 $routes->post('tambahrp/addrp', 'Admin::addrp');
 $routes->get('editrp', 'Admin::editrp');
-$routes->get('editrp', 'Admin::editrp');
+$routes->get('editrp/(:num)', 'Admin::editrp/$1');
+$routes->post('editrp/updaterp/(:num)', 'Admin::updaterp/$1');
+$routes->post('editrp/deleterp/(:num)', 'Admin::deleterp/$1');
 $routes->get('profil', 'Admin::profil');
 $routes->get('notif', 'Admin::notif');
 
