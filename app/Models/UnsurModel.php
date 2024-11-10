@@ -14,11 +14,6 @@ class UnsurModel extends Model
     // protected $protectFields    = true;
     protected $allowedFields    = [ 'unsur', 'keterangan'];
 
-    public function getAllUnsur()
-    {
-        return $this->orderBy('id', 'ASC') // atau 'created_at' jika ada
-                    ->findAll();
-    }
 
     // protected bool $allowEmptyInserts = false;
     // protected bool $updateOnlyChanged = true;

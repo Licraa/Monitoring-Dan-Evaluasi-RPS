@@ -62,38 +62,48 @@
                 <h1 class="h4"><a href="<?= site_url('/admin'); ?>">Home</a> / <a href="<?= site_url('akun'); ?>">Kelola Akun</a> / Tambah Akun</h1>
             </header>
             <div class="form-container">
-                <form id="userForm">
-                    <label>Username:</label>
-                    <input type="text" required>
+            <form id="userForm" action="tambah/adduser" method="POST">
+                <label>Username:</label>
+                <input type="text" name="username" required>
 
-                    <label>Password:</label>
-                    <input type="password" required>
+                <label>Password:</label>
+                <input type="password" name="password" required>
 
-                    <label>Nama:</label>
-                    <input type="text" required>
+                <label>Nama:</label>
+                <input type="text" name="nama" required>
 
-                    <label>NIDN:</label>
-                    <input type="text" required>
+                <label>NIDN:</label>
+                <input type="text" name="nidn" required>
 
-                    <label>Email:</label>
-                    <input type="text" required>
+                <label>Email:</label>
+                <input type="text" name="email" required>
 
-                    <label>Fakultas:</label>
-                    <input type="text" required>
-
-                    <label>Jurusan:</label>
-                    <input type="text" required>
-
-                    <label>Peran:</label>
-                    <select required>
-                        <option value="admin">Admin</option>
-                        <option value="dosen">Dosen</option>
-                        <option value="gpm">GPM</option>
-                        <option value="kajur">Kajur</option>
-                    </select>
-
-                    <button class="but" type="submit" id="saveButton">Simpan</button>
-                </form>
+                <label>Fakultas:</label>
+                <select name="fakultas_id" required>
+                    <option value="">Pilih Fakultas</option> <!-- Placeholder -->
+                    <?php foreach ($fakultas as $fakultasItem): ?>
+                        <option value="<?= $fakultasItem->id; ?>"><?= $fakultasItem->nama_fakultas; ?></option>
+                    <?php endforeach; ?>
+                </select>
+                    
+                <label>Jurusan:</label>
+                <select name="jurusan_id" required>
+                    <option value="">Pilih Jurusan</option> <!-- Placeholder -->
+                    <?php foreach ($jurusan as $jurusanItem): ?>
+                        <option value="<?= $jurusanItem->id; ?>"><?= $jurusanItem->nama_jurusan; ?></option>
+                    <?php endforeach; ?>
+                </select>
+                    
+                <label>Peran:</label>
+                <select name="role_id" required>
+                    <option value="">Pilih Role</option> <!-- Placeholder -->
+                <?php foreach ($roles as $role): ?>
+                        <option value="<?= $role->id; ?>"><?= $role->name; ?></option>
+                    <?php endforeach; ?>
+                </select>
+                    
+                <button type="submit">Tambah Pengguna</button>
+            </form>
             </div>
         </div>
     </div>

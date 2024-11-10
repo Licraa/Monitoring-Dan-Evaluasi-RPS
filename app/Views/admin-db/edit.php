@@ -62,38 +62,60 @@
                 <h1 class="h4"><a href="<?= site_url('/'); ?>">Home</a> / <a href="<?= site_url('akun'); ?>">Kelola Akun</a> / Edit Akun</h1>
             </header>
             <div class="form-container">
-                <form id="userForm">
+                <form action="/admin-db/updateUser/<?= $user->id; ?>" method="post">
+                <?= csrf_field() ?>
+
                     <label>Username:</label>
-                    <input type="text" required>
-
-                    <label>Password:</label>
-                    <input type="password" required>
-
-                    <label>Nama:</label>
-                    <input type="text" required>
-
-                    <label>NIDN:</label>
-                    <input type="text" required>
-
+                    <input type="text" name="username" value="<?= old('username', $user->username); ?>" required>
+                            
                     <label>Email:</label>
-                    <input type="text" required>
-
+                    <input type="email" name="email" value="<?= old('email', $user->email); ?>" required>
+                            
+                    <label>Nama:</label>
+                    <input type="text" name="nama" value="<?= old('nama', $userDetail->nama); ?>" required>
+                            
+                    <label>NIDN:</label>
+                    <input type="text" name="nidn" value="<?= old('nidn', $userDetail->nidn); ?>" required>
+                            
                     <label>Fakultas:</label>
-                    <input type="text" required>
-
-                    <label>Jurusan:</label>
-                    <input type="text" required>
-
-                    <label>Peran:</label>
-                    <select required>
-                        <option value="admin">Admin</option>
-                        <option value="dosen">Dosen</option>
-                        <option value="gpm">GPM</option>
-                        <option value="kajur">Kajur</option>
+                    <select name="fakultas_id" required>
+                        <?php foreach ($fakultas as $fakultasItem): ?>
+                            <option value="<?= $fakultasItem->id; ?>" <?= $fakultasItem->id == $userDetail->fakultas_id ? 'selected' : ''; ?>>
+                                <?= $fakultasItem->nama_fakultas; ?>
+                            </option>
+                        <?php endforeach; ?>
                     </select>
-
-                    <button class="but" type="submit" id="saveButton">Simpan</button>
+                        
+                    <label>Jurusan:</label>
+                    <select name="jurusan_id" required>
+                        <?php foreach ($jurusan as $jurusanItem): ?>
+                            <option value="<?= $jurusanItem->id; ?>" <?= $jurusanItem->id == $userDetail->jurusan_id ? 'selected' : ''; ?>>
+                                <?= $jurusanItem->nama_jurusan; ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                        
+                    <label>Role:</label>
+                    <select name="role_id" required>
+                        <?php foreach ($roles as $role): ?>
+                            <option value="<?= $role->id; ?>" <?= $role->id == $user->role_id ? 'selected' : ''; ?>>
+                                <?= $role->name; ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                        
+                    <button type="submit">Update User</button>
                 </form>
+                        
+                <?php if (session()->getFlashdata('errors')): ?>
+                    <div>
+                        <ul>
+                            <?php foreach (session()->getFlashdata('errors') as $error): ?>
+                                <li><?= esc($error); ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
