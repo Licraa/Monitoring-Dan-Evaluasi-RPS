@@ -215,6 +215,13 @@ class Admin extends BaseController
         return redirect()->to('/akun')->with('message', 'Pengguna berhasil diperbarui');
     }
 
+    public function deleteuser($id = null)
+    {
+        $this ->user->where('id', $id)->delete();
+            // Redirect atau tampilkan pesan sukses
+            return redirect()->to('/akun')->with('message', 'Data berhasil dihapus');
+    }
+
 
     public function editrp($id = null)
     {

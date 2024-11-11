@@ -22,6 +22,7 @@ $routes->post('tambah/adduser', 'Admin::adduser');
 // $routes->get('edit', 'Admin::edit');
 $routes->get('edit/(:num)', 'Admin::edit/$1');
 $routes->post('edit/edituser/(:num)', 'Admin::updateuser/$1');
+$routes->post('deleteuser/(:num)', 'Admin::deleteuser/$1');
 
 $routes->get('tambahrp', 'Admin::tambahrp');
 $routes->post('tambahrp/addrp', 'Admin::addrp');
