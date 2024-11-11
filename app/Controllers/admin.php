@@ -152,30 +152,27 @@ class Admin extends BaseController
 
     public function edit($id = null)
     {
-        $data ['users'] = $this ->user->where('id', $id)->first();
-        return view('admin-db/edit', $data);
-    }
-
-    public function editUser($id = null)
-    {
-        // Ambil data user dan detail user berdasarkan ID
+    // Validasi ID pengguna yang akan diedit
         $user = $this->user->find($id);
-        $userDetail = $this->userdetail->where('user_id', $id)->first();
-        $fakultas = $this->fakultas->findAll();
-        $jurusan = $this->jurusan->findAll();
-        $roles = $this->auths->findAll();
-
-        if (!$user || !$userDetail) {
-            throw new \CodeIgniter\Exceptions\PageNotFoundException("User dengan ID $id tidak ditemukan");
+        if (!$user) {
+        return redirect()->back()->with('errors', 'Pengguna tidak ditemukan');
         }
 
-        return view('admin-db/edit_user', [
+        $userDetail = $this->userdetail->where('user_id', $id)->first();
+        if (!$userDetail) {
+            return redirect()->back()->with('errors', 'Detail pengguna tidak ditemukan');
+        }
+
+    // Ambil data pengguna berdasarkan ID
+        $data = [
             'user' => $user,
-            'userDetail' => $userDetail,
-            'fakultas' => $fakultas,
-            'jurusan' => $jurusan,
-            'roles' => $roles,
-        ]);
+            'userdetail' => $userDetail,
+            'fakultas' => $this->fakultas->findAll(),  // Mengambil semua data fakultas
+            'jurusan' => $this->jurusan->findAll(),    // Mengambil semua data jurusan
+            'roles' => $this->auths->findAll()         // Mengambil semua data role
+        ];
+
+        return view('admin-db/edit', $data);
     }
 
     public function updateUser($id = null)

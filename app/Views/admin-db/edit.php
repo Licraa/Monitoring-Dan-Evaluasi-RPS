@@ -62,60 +62,59 @@
                 <h1 class="h4"><a href="<?= site_url('/'); ?>">Home</a> / <a href="<?= site_url('akun'); ?>">Kelola Akun</a> / Edit Akun</h1>
             </header>
             <div class="form-container">
-                <form action="/admin-db/updateUser/<?= $user->id; ?>" method="post">
-                <?= csrf_field() ?>
+                <form action="<?= site_url('edit/edituser/'.$user->id)?>" id="userForm" method="post" autocomplete="off">
+                <?= csrf_field()  ?>
 
                     <label>Username:</label>
-                    <input type="text" name="username" value="<?= old('username', $user->username); ?>" required>
-                            
-                    <label>Email:</label>
-                    <input type="email" name="email" value="<?= old('email', $user->email); ?>" required>
-                            
+                    <input type="text" name="username" value="<?= esc($user->username) ?>" required>
+
+                    <label>Password:</label>
+                    <input type="password" name="password" placeholder="Kosongkan jika tidak ingin mengubah password">
+
                     <label>Nama:</label>
-                    <input type="text" name="nama" value="<?= old('nama', $userDetail->nama); ?>" required>
-                            
+                    <input type="text" name="nama" value="<?= esc($userdetail->nama) ?>" required>
+
                     <label>NIDN:</label>
-                    <input type="text" name="nidn" value="<?= old('nidn', $userDetail->nidn); ?>" required>
-                            
+                    <input type="text" name="nidn" value="<?= esc($userdetail->nidn) ?>" required>
+
+                    <label>Email:</label>
+                    <input type="text" name="email" value="<?= esc($user->email) ?>" required>
+
                     <label>Fakultas:</label>
                     <select name="fakultas_id" required>
+                        <option value="">Pilih Fakultas</option> <!-- Placeholder -->
                         <?php foreach ($fakultas as $fakultasItem): ?>
-                            <option value="<?= $fakultasItem->id; ?>" <?= $fakultasItem->id == $userDetail->fakultas_id ? 'selected' : ''; ?>>
-                                <?= $fakultasItem->nama_fakultas; ?>
+                            <option value="<?= $fakultasItem->id; ?>" 
+                                <?= $fakultasItem->id == $userdetail->fakultas_id ? 'selected' : ''; ?>>
+                                <?= esc($fakultasItem->nama_fakultas); ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
-                        
+
                     <label>Jurusan:</label>
                     <select name="jurusan_id" required>
+                        <option value="">Pilih Jurusan</option> <!-- Placeholder -->
                         <?php foreach ($jurusan as $jurusanItem): ?>
-                            <option value="<?= $jurusanItem->id; ?>" <?= $jurusanItem->id == $userDetail->jurusan_id ? 'selected' : ''; ?>>
-                                <?= $jurusanItem->nama_jurusan; ?>
+                            <option value="<?= $jurusanItem->id; ?>" 
+                                <?= $jurusanItem->id == $userdetail->jurusan_id ? 'selected' : ''; ?>>
+                                <?= esc($jurusanItem->nama_jurusan); ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
-                        
-                    <label>Role:</label>
+
+                    <label>Peran:</label>
                     <select name="role_id" required>
+                        <option value="">Pilih Role</option> <!-- Placeholder -->
                         <?php foreach ($roles as $role): ?>
-                            <option value="<?= $role->id; ?>" <?= $role->id == $user->role_id ? 'selected' : ''; ?>>
-                                <?= $role->name; ?>
+                            <option value="<?= $role->id; ?>" 
+                                <?= $role->id == $user->role_id ? 'selected' : ''; ?>>
+                                <?= esc($role->name); ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
-                        
-                    <button type="submit">Update User</button>
+
+                <button type="submit">edit Pengguna</button>
                 </form>
-                        
-                <?php if (session()->getFlashdata('errors')): ?>
-                    <div>
-                        <ul>
-                            <?php foreach (session()->getFlashdata('errors') as $error): ?>
-                                <li><?= esc($error); ?></li>
-                            <?php endforeach; ?>
-                        </ul>
-                    </div>
-                <?php endif; ?>
             </div>
         </div>
     </div>
