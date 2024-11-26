@@ -97,7 +97,7 @@ class AuthController extends Controller
         $authorization = service('authorization'); // Service authorization
     
         if ($authorization->inGroup('dosen', $userId)) {
-            return redirect()->to('/dashboard/dashboard_Dosen');
+            return redirect()->to('/dosen');
         } elseif ($authorization->inGroup('gpm', $userId)) {
             return redirect()->to('/dashboard/dashboard_gpm');
         } elseif ($authorization->inGroup('admin', $userId)) {
