@@ -53,12 +53,23 @@
 }
 
 /* Notification list items */
+.large-checkbox {
+    width: 15px;
+    height: 15px;
+}
+
 .list-group-item.notification {
     display: flex;
-    align-items: start;
-    background-color: #f8f9fa; /* Light gray background for read */
+    align-items: center; 
+    padding: 10px 15px; 
+    background-color: #f8f9fa; 
     border: 1px solid #ddd;
-    transition: background-color 0.3s ease;
+    transition: box-shadow 0.3s ease;
+    gap: 10px; 
+}
+
+.list-group-item.notification:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .list-group-item.notification.unread {
@@ -75,9 +86,10 @@
     background-color: #d0e7ff;
 }
 
+/* Badge styling */
 .list-group-item .badge {
     font-size: 0.8rem;
-    padding: 5px;
+    padding: 5px 8px;
     border-radius: 5px;
 }
 
@@ -96,32 +108,51 @@
     color: white;
 }
 
+/* Nama pengirim */
 .sender-name {
     font-size: 0.9rem;
     color: #555;
+    margin-right: 10px; 
+    flex: 1; 
+    min-width: 100px;
 }
 
+.status {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #007bff; 
+    margin-right: 10px;
+    flex: 0.5; 
+    text-align: center; 
+}
+
+.message-content {
+    font-size: 0.9rem;
+    color: #444;
+    flex: 3; 
+    white-space: nowrap; 
+    overflow: hidden; 
+    text-overflow: ellipsis; 
+    margin-right: 10px; 
+}
+
+/* Waktu di sisi kanan */
 .time {
     color: #888;
     font-size: 0.8rem;
+    margin-left: auto; 
+    text-align: right; 
+    flex: 1; 
 }
 
-.btn-red {
-    background-color: #ff0000;
-    color: #fff;
-    padding: 10px 20px;
-    margin-top: 10px;
-    font-size: 1rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+/* Checkbox styling */
+.list-group-item.notification input[type="checkbox"] {
+    pointer-events: auto;
+    z-index: 1;
+    margin-right: 15px;
 }
 
-.btn-red:hover {
-    background-color: #bb0000;
-}
-
+/* Link untuk notifikasi */
 .notification-link {
     display: flex;
     align-items: center;
@@ -134,8 +165,44 @@
     text-decoration: none;
 }
 
-.list-group-item.notification input[type="checkbox"] {
-    pointer-events: auto;
-    z-index: 1;
-    margin-right: 10px;
+/* Tombol hapus */
+.btn-red {
+    background-color: #ff0000;
+    color: #fff;
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-red:hover {
+    background-color: #bb0000;
+}
+
+.custom-btn {
+    background-color: rgb(221, 221, 221);
+    border: 1px solid rgb(151, 151, 151);
+    border-radius: 4px;
+    padding: 7px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.custom-checkbox {
+    accent-color: black;
+    margin-right: 5px;
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+}
+
+.custom-chevron {
+    color: black;
+    font-size: 1rem;
+}
+
+.search-icon {
+    cursor: pointer;
 }

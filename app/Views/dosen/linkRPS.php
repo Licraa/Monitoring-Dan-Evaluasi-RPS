@@ -58,7 +58,7 @@
             <!-- Right-aligned container for profile and notification icons -->
             <div class="right-icons">
                 <a href="profile.html" class="profile-link">
-                    <span class="admin-name">Nama Dosen</span>
+                    <span class="admin-name"><?= user()->username ?></span>
                     <i class="bi bi-person-fill"></i>
                 </a>
                 <a href="notifikasi-rps.html" class="notif">
@@ -77,38 +77,40 @@
                     <div class="card-body">
                         <h2 class="text-start">Upload Rencana Pembelajaran Semester</h2>
                         <!-- Single form -->
-                        <form id="uploadForm" action="dosen/simpan_rps" method="post" enctype="multipart/form-data">
+                        <form id="uploadForm" action="<?= base_url('dosen/simpan_rps') ?>" method="POST">
+                            <?= csrf_field() ?>
+                            <input type="hidden" name="user_id" value="<?= user()->id ?>">
                             <div class="mb-3">
                                 <label for="mataKuliah" class="form-label">Mata Kuliah</label>
-                                <input type="text" class="form-control" id="mataKuliah" readonly>
+                                <input type="text" class="form-control" id="mataKuliah" name="mataKuliah" readonly>
                             </div>
                             <div class="mb-3">
                                 <label for="kode" class="form-label">Kode Mata Kuliah</label>
-                                <input type="text" class="form-control" id="kode" readonly>
+                                <input type="text" class="form-control" id="kode" name="kode" readonly>
                             </div>
                             <div class="mb-3">
                                 <label for="prodi" class="form-label">Prodi</label>
-                                <input type="text" class="form-control" id="prodi" readonly>
+                                <input type="text" class="form-control" id="prodi" name="prodi" readonly>
                             </div>
                             <div class="mb-3">
                                 <label for="tahun" class="form-label">Tahun Ajaran</label>
-                                <input type="text" class="form-control" id="tahun" required>
+                                <input type="text" class="form-control" id="tahun" name="tahun" required>
                             </div>
                             <div class="mb-3">
                                 <label for="semester" class="form-label">Semester</label>
-                                <input type="text" class="form-control" id="semester" required>
+                                <input type="text" class="form-control" id="semester" name="semester" required>
                             </div>
                             <div class="mb-3">
                                 <label for="kelas" class="form-label">Kelas</label>
-                                <input type="text" class="form-control" id="kelas" readonly>
+                                <input type="text" class="form-control" id="kelas" name="kelas" readonly>
                             </div>
                             <div class="mb-3">
                                 <label for="rpsLink" class="form-label">Masukkan Link RPS</label>
-                                <input type="url" class="form-control" id="rpsLink" placeholder="https://drive.google.com/">
+                                <input type="url" class="form-control" id="rpsLink" name="rpsLink" placeholder="https://drive.google.com/" required>
                                 <div class="form-text text-muted">Masukkan link yang mengarah ke file RPS dalam format PDF.</div>
                             </div>
                             <div class="d-flex justify-content-between">
-                                <a href="dosen" class="btn btn-secondary">Kembali</a>
+                                <a href="/dosen" class="btn btn-secondary">Kembali</a>
                                 <button type="submit" class="btn btn-primary">Upload</button>
                             </div>
                         </form>
@@ -119,164 +121,52 @@
     </div>
 
     <script>
-        // Fungsi untuk mendapatkan parameter query dari URL
-        function dapatkanParameterQuery() {
+        // Function to get query parameters
+        function getQueryParams() {
             const params = new URLSearchParams(window.location.search);
             return {
-                mataKuliah: params.get('mata_kuliah') || '',
+                mataKuliah: params.get('mataKuliah') || '',
                 kode: params.get('kode') || '',
                 prodi: params.get('prodi') || '',
-                tahunAjaran: params.get('tahun_ajaran') || '',
+                tahun: params.get('tahun') || '',
                 semester: params.get('semester') || '',
                 kelas: params.get('kelas') || ''
             };
         }
 
-        // Fungsi untuk memvalidasi input RPS
-        function validasiInputRPS() {
-            // Ambil nilai input
-            const tahun = document.getElementById('tahun').value.trim();
-            const semester = document.getElementById('semester').value.trim();
-            const rpsLink = document.getElementById('rpsLink').value.trim();
-
-            // Array untuk menyimpan pesan kesalahan
-            const errors = [];
-
-            // Validasi tahun ajaran
-            if (!tahun) {
-                errors.push('Tahun ajaran harus diisi');
-            } else if (!/^\d{4}\/\d{4}$/.test(tahun)) {
-                errors.push('Format tahun ajaran harus dalam format YYYY/YYYY');
-            }
-
-            // Validasi semester
-            if (!semester) {
-                errors.push('Semester harus diisi');
-            } else if (!['Ganjil', 'Genap'].includes(semester)) {
-                errors.push('Semester harus Ganjil atau Genap');
-            }
-
-            // Validasi link RPS
-            if (!rpsLink) {
-                errors.push('Link RPS harus diisi');
-            } else {
-                // Validasi URL dengan regex sederhana
-                const urlPattern = new RegExp('^(https?:\\/\\/)?' + // protokol
-                    '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
-                    '((\\d{1,3}\\.){3}\\d{1,3}))' + // atau ip (v4) address
-                    '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
-                    '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
-                    '(\\#[-a-z\\d_]*)?$', 'i'); // fragment locator
-
-                if (!urlPattern.test(rpsLink)) {
-                    errors.push('Format URL tidak valid');
-                }
-            }
-
-            return errors;
-        }
-
-        // Event listener saat DOM sudah dimuat
+        // Populate form fields with values from query parameters
         document.addEventListener('DOMContentLoaded', function() {
-            // Dapatkan parameter dari URL
             const {
                 mataKuliah,
                 kode,
                 prodi,
-                tahunAjaran,
+                tahun,
                 semester,
                 kelas
-            } = dapatkanParameterQuery();
-
-            // Isi input form secara otomatis
+            } = getQueryParams();
             document.getElementById('mataKuliah').value = mataKuliah;
             document.getElementById('kode').value = kode;
             document.getElementById('prodi').value = prodi;
-            document.getElementById('tahun').value = tahunAjaran;
+            document.getElementById('tahun').value = tahun;
             document.getElementById('semester').value = semester;
             document.getElementById('kelas').value = kelas;
+        });
 
-            // Tambahkan event listener untuk form submission
-            document.getElementById('uploadForm').addEventListener('submit', function(event) {
-                // Cegah form submit otomatis
-                event.preventDefault();
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentUrl = window.location.href;
 
-                // Jalankan validasi
-                const errors = validasiInputRPS();
+            // Check if URL matches unggah-rps.html or related pages
+            if (currentUrl.includes('unggah-rps.html') || currentUrl.includes('linkRPS.html')) {
+                const unggahRpsMenu = document.getElementById('unggahRpsMenu');
+                const menuRPS = document.getElementById('menuRPS');
 
-                // Periksa apakah ada kesalahan
-                if (errors.length > 0) {
-                    // Tampilkan pesan kesalahan
-                    const errorContainer = document.createElement('div');
-                    errorContainer.classList.add('alert', 'alert-danger');
-                    errorContainer.innerHTML = '<ul>' +
-                        errors.map(error => `<li>${error}</li>`).join('') +
-                        '</ul>';
+                // Add 'active' class to highlight menu
+                unggahRpsMenu.classList.add('active');
+                menuRPS.classList.remove('active');
 
-                    // Sisipkan pesan kesalahan sebelum form
-                    const form = document.getElementById('uploadForm');
-                    form.insertBefore(errorContainer, form.firstChild);
-
-                    return;
-                }
-
-                // Siapkan data untuk dikirim
-                const formData = {
-                    mata_kuliah: document.getElementById('mataKuliah').value,
-                    kode: document.getElementById('kode').value,
-                    prodi: document.getElementById('prodi').value,
-                    kelas: document.getElementById('kelas').value,
-                    tahun_ajaran: document.getElementById('tahun').value,
-                    semester: document.getElementById('semester').value,
-                    rps_link: document.getElementById('rpsLink').value,
-                    tanggal_upload: new Date().toISOString().split('T')[0] // Format YYYY-MM-DD
-                };
-
-                // Kirim data menggunakan fetch API
-                fetch('/dosen/simpan_rps', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            // Tambahkan CSRF token jika digunakan
-                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
-                        },
-                        body: JSON.stringify(formData)
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Gagal mengunggah RPS');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        // Tampilkan pesan sukses
-                        alert('RPS berhasil diunggah');
-                        // Redirect ke halaman daftar upload
-                        window.location.href = '/dosen/daftar_upload';
-                    })
-                    .catch(error => {
-                        // Tampilkan pesan kesalahan
-                        const errorContainer = document.createElement('div');
-                        errorContainer.classList.add('alert', 'alert-danger');
-                        errorContainer.textContent = error.message;
-
-                        const form = document.getElementById('uploadForm');
-                        form.insertBefore(errorContainer, form.firstChild);
-                    });
-            });
-
-            // Tambahkan event listener untuk sidebar
-            const menuRPS = document.getElementById('menuRPS');
-            const unggahRpsMenu = document.getElementById('unggahRpsMenu');
-            const daftarUploadRpsMenu = document.getElementById('daftarUploadRpsMenu');
-
-            menuRPS.addEventListener('click', function() {
-                // Toggle submenu RPS
-                const submenuRPS = document.querySelectorAll('.submenu-item');
-                submenuRPS.forEach(submenu => {
-                    submenu.style.display = submenu.style.display === 'block' ? 'none' : 'block';
-                });
-            });
+                // Ensure submenu is visible
+                unggahRpsMenu.style.display = 'block';
+            }
         });
     </script>
 
@@ -285,7 +175,7 @@
         <p>&copy; 2024 Fakultas Teknik. All rights reserved.</p>
     </footer>
 
-    <script src="dosen.js"></script>
+    <script src="/js/dosen.js"></script>
     <!-- Scripts for Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

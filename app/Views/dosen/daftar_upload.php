@@ -24,13 +24,13 @@
         <i class="bi bi-speedometer2"></i><span>Halaman Utama</span>
       </a>\
 
-      <a href="/dosen/menurps" class="menu-item" id="menuRPS">
+      <a href="#" class="menu-item" id="menuRPS">
         <i class="bi bi-file-earmark-arrow-up-fill"></i><span>RPS</span>
         <i class="bi bi-chevron-left chevron-icon float-end"></i>
       </a>
 
       <a href="/dosen/unggah-rps" class="menu-item submenu-item" id="unggahRpsMenu" style="display: none;"><span>Unggah RPS</span></a>
-      <a href="dosen/daftar_upload" class="menu-item submenu-item" id="daftarUploadRpsMenu" style="display: none;"><span>Daftar Upload RPS</span></a>
+      <a href="/dosen/daftar_upload" class="menu-item submenu-item" id="daftarUploadRpsMenu" style="display: none;"><span>Daftar Upload RPS</span></a>
       <a href="#" class="menu-item" id="menuBAP">
         <i class="bi bi-file-earmark-pdf-fill"></i><span>BAP</span>
         <i class="bi bi-chevron-left chevron-icon float-end"></i>
@@ -307,6 +307,37 @@
           window.location.href = `feedback.html?${queryParams}`;
         });
       });
+
+      // Get menu elements
+      const menuRPS = document.getElementById('menuRPS');
+      const unggahRpsMenu = document.getElementById('unggahRpsMenu');
+      const daftarUploadRpsMenu = document.getElementById('daftarUploadRpsMenu');
+
+      // Function to toggle submenu visibility
+      function toggleSubmenu() {
+        const isVisible = unggahRpsMenu.style.display === 'block';
+        unggahRpsMenu.style.display = isVisible ? 'none' : 'block';
+        daftarUploadRpsMenu.style.display = isVisible ? 'none' : 'block';
+
+        // Toggle chevron icon
+        const chevron = menuRPS.querySelector('.chevron-icon');
+        chevron.style.transform = isVisible ? 'rotate(0deg)' : 'rotate(-90deg)';
+      }
+
+      // Add click event listener to RPS menu
+      menuRPS.addEventListener('click', function(e) {
+        e.preventDefault();
+        toggleSubmenu();
+      });
+
+      // Show submenu if current page is related to RPS
+      const currentUrl = window.location.pathname;
+      if (currentUrl.includes('/dosen/unggah-rps') ||
+        currentUrl.includes('/dosen/daftar_upload')) {
+        unggahRpsMenu.style.display = 'block';
+        daftarUploadRpsMenu.style.display = 'block';
+        menuRPS.querySelector('.chevron-icon').style.transform = 'rotate(-90deg)';
+      }
     });
   </script>
 

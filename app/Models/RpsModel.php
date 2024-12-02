@@ -16,5 +16,8 @@ class RpsModel extends Model
     'link_rps',
     'jurusan_id',
   ];
+
+  protected $createdField = 'created_at';
+  protected $updatedField = 'updated_at';
   protected $useTimestamps = true; // Aktifkan created_at & updated_at otomatis
 }

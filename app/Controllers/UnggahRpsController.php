@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Models\RpsModel;
 use CodeIgniter\Controller;
 
-class UnuggahRpsController extends Controller
+class UnggahRpsController extends Controller
 {
   public function simpan_rps()
   {
