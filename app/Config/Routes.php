@@ -14,36 +14,38 @@ $routes->get('/dashboard/dashboard_kajur', 'Dashboard::kajur', ['filter' => 'rol
 
 
 // router admin 
-$routes->get('/admin', 'Admin::index');
-$routes->get('akun', 'Admin::akun');
-$routes->get('rps', 'Admin::rps');
+$routes->get('/admin', 'AdminController::index');
+$routes->get('akun', 'AdminController::akun');
+$routes->get('rps', 'AdminController::rps');
 
-$routes->get('tambah', 'Admin::tambah');
-$routes->post('tambah/adduser', 'Admin::adduser');
+$routes->get('tambah', 'AdminController::tambah');
+$routes->post('tambah/adduser', 'AdminController::adduser');
 
 // $routes->get('edit', 'Admin::edit');
-$routes->get('edit/(:num)', 'Admin::edit/$1');
-$routes->post('edit/edituser/(:num)', 'Admin::updateuser/$1');
-$routes->post('deleteuser/(:num)', 'Admin::deleteuser/$1');
+$routes->get('edit/(:num)', 'AdminController::edit/$1');
+$routes->post('edit/edituser/(:num)', 'AdminController::updateuser/$1');
+$routes->post('deleteuser/(:num)', 'AdminController::deleteuser/$1');
 
-$routes->get('tambahrp', 'Admin::tambahrp');
-$routes->post('tambahrp/addrp', 'Admin::addrp');
+$routes->get('tambahrp', 'AdminController::tambahrp');
+$routes->post('tambahrp/addrp', 'AdminController::addrp');
 
 // $routes->get('editrp', 'Admin::editrp');
-$routes->get('editrp/(:num)', 'Admin::editrp/$1');
-$routes->post('editrp/updaterp/(:num)', 'Admin::updaterp/$1');
-$routes->post('editrp/deleterp/(:num)', 'Admin::deleterp/$1');
+$routes->get('editrp/(:num)', 'AdminController::editrp/$1');
+$routes->post('editrp/updaterp/(:num)', 'AdminController::updaterp/$1');
+$routes->post('editrp/deleterp/(:num)', 'AdminController::deleterp/$1');
 
-$routes->get('profil', 'Admin::profil');
-$routes->get('notif', 'Admin::notif');
+$routes->get('profil', 'AdminController::profil');
+$routes->get('notif', 'AdminController::notif');
 // $routes->get('/dosen', 'dosen::index');
 // $routes->get('/gpm', 'gpm::index');
 
 // route admin selesai
 
 // route dosen
-$routes->get('/dosen', 'dosen::dosen', ['filter' => 'role:dosen']);
-$routes->get('dosen/unggah-rps', 'dosen::unggah_rps');
-$routes->get('dosen/linkRPS', 'dosen::link_rps');
-$routes->get('dosen/isi-bap', 'dosen::bap');
-$routes->get('dosen/feedback', 'dosen::feedback');
+$routes->get('/dosen', 'dosenController::dosen', ['filter' => 'role:dosen']);
+$routes->get('dosen/unggah-rps', 'dosenController::unggah_rps');
+$routes->get('dosen/linkRPS', 'dosenController::link_rps');
+$routes->get('dosen/simpan_rps', 'dosenController::simpan_rps');
+$routes->get('dosen/daftar_upload', 'dosenController::daftar_upload');
+$routes->get('dosen/isi-bap', 'dosenController::bap');
+$routes->get('dosen/feedback', 'dosenController::feedback');
