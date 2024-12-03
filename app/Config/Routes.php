@@ -50,3 +50,6 @@ $routes->get('dosen/daftar_upload', 'dosenController::daftar_upload');
 $routes->get('dosen/isi-bap', 'dosenController::bap');
 $routes->get('dosen/feedback', 'dosenController::feedback');
 $routes->get('dosen/getMataKuliahByJurusan/(:num)', 'dosenController::getMataKuliahByJurusan/$1');
+$routes->delete('dosen/hapus_rps/(:num)', 'dosenController::hapus_rps/$1');
+$routes->get('dosen/get_rps/(:num)', 'dosenController::get_rps/$1');
+$routes->put('dosen/update_rps/(:num)', 'dosenController::update_rps/$1');

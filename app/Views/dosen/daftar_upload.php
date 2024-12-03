@@ -76,19 +76,15 @@
           <div class="input-group input-group-container">
             <select class="form-select" aria-label="Select Mata Kuliah">
               <option selected disabled>Pilih Mata Kuliah</option>
-              <option value="MK001">Kalkulus</option>
-              <option value="MK002">Struktur Data</option>
-              <option value="MK003">Basis Data</option>
-              <option value="MK004">Pemrograman Web</option>
-              <option value="MK004">PAA</option>
+              <?php foreach ($mata_kuliah as $mk): ?>
+                <option value="<?= $mk->kode_mk ?>"><?= $mk->nama_mk ?></option>
+              <?php endforeach; ?>
             </select>
             <select class="form-select" aria-label="Select Prodi">
               <option selected disabled>Pilih Prodi</option>
-              <option value="Teknik Informatika">Teknik Informatika</option>
-              <option value="Teknik Elektro">Teknik Elektro</option>
-              <option value="Teknik Perkapalan">Teknik Perkapalan</option>
-              <option value="Kimia">Kimia</option>
-              <option value="Teknik Industri">Teknik Industri</option>
+              <?php foreach ($prodi as $p): ?>
+                <option value="<?= $p->id ?>"><?= $p->nama_jurusan ?></option>
+              <?php endforeach; ?>
             </select>
             <button class="btn btn-outline-secondary custom-btn" id="searchButton">
               <i class="bi bi-search"></i>
@@ -113,7 +109,41 @@
                   </tr>
                 </thead>
                 <tbody id="rpsListBody">
-                  <!-- Rows will be added dynamically -->
+                  <?php if (!empty($rps_list)): ?>
+                    <?php foreach ($rps_list as $index => $rps): ?>
+                      <tr>
+                        <td><?= $index + 1 ?></td>
+                        <td><?= esc($rps->nama_mk) ?></td>
+                        <td><?= esc($rps->kode_mk) ?></td>
+                        <td><?= esc($rps->nama_jurusan) ?></td>
+                        <td><?= esc($rps->kelas) ?></td>
+                        <td><?= date('d-m-Y', strtotime($rps->created_at)) ?></td>
+                        <td>
+                          <?php if (!empty($rps->link_rps)): ?>
+                            <a href="<?= esc($rps->link_rps) ?>" target="_blank">
+                              <i class="bi bi-eye-fill"></i>
+                            </a>
+                          <?php endif; ?>
+                        </td>
+                        <td>
+                          <i class="bi bi-pencil-square edit-icon"
+                            data-id="<?= $rps->id ?>"
+                            data-bs-toggle="tooltip"
+                            title="Edit"
+                            style="cursor: pointer;"></i>
+                          <i class="bi bi-trash3-fill delete-icon"
+                            data-id="<?= $rps->id ?>"
+                            style="cursor: pointer; margin-left: 10px;"
+                            data-bs-toggle="tooltip"
+                            title="Hapus"></i>
+                        </td>
+                      </tr>
+                    <?php endforeach; ?>
+                  <?php else: ?>
+                    <tr>
+                      <td colspan="8" class="text-center">Tidak ada data RPS</td>
+                    </tr>
+                  <?php endif; ?>
                 </tbody>
               </table>
             </div>
@@ -182,164 +212,54 @@
         </div>
       </div>
     </div>
+
+    <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="uploadModalLabel">Unggah RPS Baru</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form action="<?= base_url('dosen/simpan_rps') ?>" method="post">
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="kode_mk" class="form-label">Mata Kuliah</label>
+                <select class="form-select" id="kode_mk" name="kode_mk" required>
+                  <option value="">Pilih Mata Kuliah</option>
+                  <?php foreach ($mata_kuliah as $mk): ?>
+                    <option value="<?= $mk->kode_mk ?>"><?= $mk->nama_mk ?></option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="jurusan_id" class="form-label">Program Studi</label>
+                <select class="form-select" id="jurusan_id" name="jurusan_id" required>
+                  <option value="">Pilih Program Studi</option>
+                  <?php foreach ($prodi as $p): ?>
+                    <option value="<?= $p->id ?>"><?= $p->nama_jurusan ?></option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="kelas" class="form-label">Kelas</label>
+                <input type="text" class="form-control" id="kelas" name="kelas" required>
+              </div>
+              <div class="mb-3">
+                <label for="link_rps" class="form-label">Link RPS</label>
+                <input type="url" class="form-control" id="link_rps" name="link_rps" required>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+              <button type="submit" class="btn btn-primary">Simpan</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      const rpsData = JSON.parse(localStorage.getItem('rpsData')) || [];
-      const tableBody = document.getElementById('rpsListBody');
-      let editingIndex;
 
-      // Function to render table rows
-      function renderTable(data) {
-        tableBody.innerHTML = ''; // Clear existing rows
-        data.forEach((data, index) => {
-          const newRow = document.createElement('tr');
-          newRow.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td>${data.mataKuliah}</td>
-                        <td>${data.kode}</td>
-                        <td>${data.prodi}</td>
-                        <td>${data.kelas}</td>
-                        <td>${data.tanggalUpload}</td>
-                        <td><a href="${data.rpsLink}" target="_blank"><i class="bi bi-eye-fill"></i></a></td>
-                        <td>
-                            <i class="bi bi-pencil-square edit-icon" data-index="${index}" data-bs-toggle="tooltip" title="Edit" style="cursor: pointer;"></i>
-                            <i class="bi bi-search review-icon" data-index="${index}" style="cursor: pointer; margin-left: 10px;" data-bs-toggle="tooltip" title="Feedback"></i>
-                            <i class="bi bi-trash3-fill trash-icon" onclick="hapusBaris(this, ${index})" style="cursor: pointer; margin-left: 10px;" data-bs-toggle="tooltip" title="Hapus"></i>
-                        </td>
-                    `;
-          tableBody.appendChild(newRow);
-        });
-      }
-
-      // Initial render
-      renderTable(rpsData);
-
-      // Search button functionality
-      document.getElementById('searchButton').addEventListener('click', function() {
-        const selectedMataKuliah = document.querySelector('select[aria-label="Select Mata Kuliah"]').value;
-        const selectedProdi = document.querySelector('select[aria-label="Select Prodi"]').value;
-
-        const filteredData = rpsData.filter(data => {
-          return (selectedMataKuliah === "Pilih Mata Kuliah" || data.mataKuliah === selectedMataKuliah) &&
-            (selectedProdi === "Pilih Prodi" || data.prodi === selectedProdi);
-        });
-
-        if (filteredData.length === 0) {
-          alert("Data tidak ditemukan");
-        } else {
-          renderTable(filteredData);
-        }
-      });
-
-      document.querySelectorAll('.edit-icon').forEach(icon => {
-        icon.addEventListener('click', function() {
-          const index = this.getAttribute('data-index');
-          const data = rpsData[index];
-          document.getElementById('editMataKuliah').value = data.mataKuliah;
-          document.getElementById('editKode').value = data.kode;
-          document.getElementById('editProdi').value = data.prodi;
-          document.getElementById('editTahunAjaran').value = data.tahun;
-          document.getElementById('editSemester').value = data.semester;
-          document.getElementById('editKelas').value = data.kelas;
-          editingIndex = index; // Set the index for saving changes
-          new bootstrap.Modal(document.getElementById('editModal')).show();
-        });
-      });
-
-      document.getElementById('saveEditBtn').addEventListener('click', function() {
-        const updatedData = {
-          mataKuliah: document.getElementById('editMataKuliah').value,
-          kode: document.getElementById('editKode').value,
-          prodi: document.getElementById('editProdi').value,
-          kelas: document.getElementById('editKelas').value,
-          tahun: document.getElementById('editTahunAjaran').value,
-          semester: document.getElementById('editSemester').value,
-          tanggalUpload: rpsData[editingIndex].tanggalUpload, // Maintain old date
-          rpsLink: rpsData[editingIndex].rpsLink, // Maintain old link
-        };
-
-        // Update data in array
-        rpsData[editingIndex] = updatedData;
-
-        // Save to Local Storage
-        localStorage.setItem('rpsData', JSON.stringify(rpsData));
-
-        // Update table row directly without reloading the page
-        const row = document.querySelectorAll('#rpsListBody tr')[editingIndex];
-        row.cells[1].textContent = updatedData.mataKuliah;
-        row.cells[2].textContent = updatedData.kode;
-        row.cells[3].textContent = updatedData.prodi;
-        row.cells[4].textContent = updatedData.kelas;
-
-        // Close modal
-        const editModalElement = document.getElementById('editModal');
-        const modalInstance = bootstrap.Modal.getInstance(editModalElement);
-        modalInstance.hide();
-
-        // Show success message
-        alert("Perubahan berhasil tersimpan.");
-      });
-
-      window.hapusBaris = function(element, index) {
-        if (confirm("Apakah Anda yakin ingin menghapus baris ini?")) {
-          // Remove data from array
-          rpsData.splice(index, 1);
-
-          // Update Local Storage
-          localStorage.setItem('rpsData', JSON.stringify(rpsData));
-
-          // Remove row from DOM
-          element.closest('tr').remove();
-        }
-      }
-
-      document.querySelectorAll('.review-icon').forEach(icon => {
-        icon.addEventListener('click', function() {
-          const index = this.getAttribute('data-index');
-          const data = rpsData[index];
-          const queryParams = new URLSearchParams({
-            mataKuliah: data.mataKuliah,
-            tahun: data.tahun,
-            semester: data.semester
-          }).toString();
-          window.location.href = `feedback.html?${queryParams}`;
-        });
-      });
-
-      // Get menu elements
-      const menuRPS = document.getElementById('menuRPS');
-      const unggahRpsMenu = document.getElementById('unggahRpsMenu');
-      const daftarUploadRpsMenu = document.getElementById('daftarUploadRpsMenu');
-
-      // Function to toggle submenu visibility
-      function toggleSubmenu() {
-        const isVisible = unggahRpsMenu.style.display === 'block';
-        unggahRpsMenu.style.display = isVisible ? 'none' : 'block';
-        daftarUploadRpsMenu.style.display = isVisible ? 'none' : 'block';
-
-        // Toggle chevron icon
-        const chevron = menuRPS.querySelector('.chevron-icon');
-        chevron.style.transform = isVisible ? 'rotate(0deg)' : 'rotate(-90deg)';
-      }
-
-      // Add click event listener to RPS menu
-      menuRPS.addEventListener('click', function(e) {
-        e.preventDefault();
-        toggleSubmenu();
-      });
-
-      // Show submenu if current page is related to RPS
-      const currentUrl = window.location.pathname;
-      if (currentUrl.includes('/dosen/unggah-rps') ||
-        currentUrl.includes('/dosen/daftar_upload')) {
-        unggahRpsMenu.style.display = 'block';
-        daftarUploadRpsMenu.style.display = 'block';
-        menuRPS.querySelector('.chevron-icon').style.transform = 'rotate(-90deg)';
-      }
-    });
-  </script>
 
   <!-- Footer -->
   <footer class="footer">

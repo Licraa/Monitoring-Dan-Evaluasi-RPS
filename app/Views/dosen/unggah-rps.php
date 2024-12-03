@@ -49,7 +49,6 @@
             <a href="/logout" class="menu-item">
                 <i class="bi bi-box-arrow-left"></i><span>Keluar</span>
             </a>
-
         </nav>
 
         <!-- Main content -->

@@ -11,6 +11,7 @@ document
 document.addEventListener("DOMContentLoaded", function () {
   const menuRPS = document.getElementById("menuRPS");
   const unggahRpsMenu = document.getElementById("unggahRpsMenu");
+  const daftarUploadRpsMenu = document.getElementById("daftarUploadRpsMenu");
   const chevronIcon = document.querySelector("#menuRPS .chevron-icon");
   const cardRPS = document.querySelector(
     '.custom-card-link[href="unggah-rps.html"]'
@@ -19,6 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // Set initial visibility based on localStorage
   const isSubmenuVisible = localStorage.getItem("submenuVisible") === "true";
   unggahRpsMenu.style.display = isSubmenuVisible ? "block" : "none";
+  daftarUploadRpsMenu.style.display = isSubmenuVisible ? "block" : "none";
   chevronIcon.classList.toggle("bi-chevron-down", isSubmenuVisible);
   chevronIcon.classList.toggle("bi-chevron-left", !isSubmenuVisible);
 
@@ -29,6 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Update visibility and classes
     unggahRpsMenu.style.display = isHidden ? "block" : "none";
+    daftarUploadRpsMenu.style.display = isHidden ? "block" : "none";
     chevronIcon.classList.toggle("bi-chevron-left", !isHidden);
     chevronIcon.classList.toggle("bi-chevron-down", isHidden);
 
@@ -36,9 +39,13 @@ document.addEventListener("DOMContentLoaded", function () {
     localStorage.setItem("submenuVisible", isHidden);
   });
 
-  // Prevent event bubbling for submenu item
+  // Prevent event bubbling for submenu items
   unggahRpsMenu.addEventListener("click", function (event) {
-    event.stopPropagation(); // Prevents closing on submenu item click
+    event.stopPropagation();
+  });
+
+  daftarUploadRpsMenu.addEventListener("click", function (event) {
+    event.stopPropagation();
   });
 
   // Handle click on the RPS card
