@@ -10,5 +10,10 @@ class JurusanModel extends Model
     protected $primaryKey = 'id';
     protected $allowedFields = ['nama_jurusan', 'fakultas_id'];
     protected $returnType = 'object';
+
+    public function getNamaJurusan($id)
+    {
+        $result = $this->find($id);
+        return $result ? $result['nama_jurusan'] : null;
+    }
 }
-?>

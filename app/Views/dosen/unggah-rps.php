@@ -30,7 +30,7 @@
             </a>
 
             <a href="/dosen/unggah-rps" class="menu-item submenu-item" id="unggahRpsMenu" style="display: none;"><span>Unggah RPS</span></a>
-            <a href="dosen/daftar_upload" class="menu-item submenu-item" id="daftarUploadRpsMenu" style="display: none;"><span>Daftar Upload RPS</span></a>
+            <a href="/dosen/daftar_upload" class="menu-item submenu-item" id="daftarUploadRpsMenu" style="display: none;"><span>Daftar Upload RPS</span></a>
 
             <a href="#" class="menu-item" id="menuBAP">
                 <i class="bi bi-file-earmark-pdf-fill"></i><span>BAP</span>
@@ -73,108 +73,174 @@
                 <h1 class="h4">Home / Unggah RPS</h1>
             </header>
 
-            <div class="container-fluid">
-                <!-- Filter and Pagination -->
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <div class="input-group">
-                        <select class="form-select" aria-label="Select Mata Kuliah">
-                            <option selected disabled>Pilih Mata Kuliah</option>
-                            <option value="MK001">Kalkulus</option>
-                            <option value="MK002">Struktur Data</option>
-                            <option value="MK003">Basis Data</option>
-                            <option value="MK004">Pemrograman Web</option>
-                            <option value="MK004">PAA</option>
-                        </select>
-                        <select class="form-select" aria-label="Select Semester">
-                            <option selected disabled>Pilih Semester</option>
-                            <option value="1">Ganjil</option>
-                            <option value="2">Genap</option>
-                        </select>
-                        <select class="form-select" aria-label="Select Academic Year">
-                            <option selected disabled>Pilih Tahun Ajaran</option>
-                            <option value="1">2020/2021</option>
-                            <option value="2">2021/2022</option>
-                            <option value="3">2022/2023</option>
-                            <option value="4">2023/2024</option>
-                            <option value="5">2024/2025</option>
-                            <option value="6">2025/2026</option>
-                            <option value="7">2026/2027</option>
-                        </select>
-                        <button class="btn btn-outline-secondary custom-btn" id="searchButton">
-                            <i class="bi bi-search"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Tabel unggah RPS-->
-                <div class="card">
-                    <div class="card-body">
-                        <table class="table table-bordered">
-                            <thead>
+            <!-- Tabel unggah RPS-->
+            <div class="card">
+                <div class="card-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Upload Dokumen RPS</th>
+                                <th>Jurusan</th>
+                                <th>Mata Kuliah</th>
+                                <th>Kode Mata Kuliah</th>
+                                <th>Tahun Ajaran</th>
+                                <th>Semester</th>
+                                <th>Kelas</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($rps as $index => $row): ?>
                                 <tr>
-                                    <th>No.</th>
-                                    <th>Upload Dokumen RPS</th>
-                                    <th>Mata Kuliah</th>
-                                    <th>Kode Mata Kuliah</th>
-                                    <th>Prodi</th>
-                                    <th>Tahun Ajaran</th>
-                                    <th>Semester</th>
-                                    <th>Kelas</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td><a href="linkRPS.html" onclick="passData(event, 1)" class="btn btn-sm btn-outline-primary btn-full-width">Upload RPS</a></td>
-                                    <td><input type="text" class="form-control mata-kuliah" placeholder="Mata Kuliah"></td>
-                                    <td><input type="text" class="form-control kode" placeholder="Kode Mata Kuliah"></td>
+                                    <td><?= $index + 1 ?></td>
+                                    <td><a href="linkRPS.html" onclick="passData(event, <?= $index + 1 ?>)" class="btn btn-sm btn-outline-primary btn-full-width">Upload RPS</a></td>
                                     <td>
-                                        <select class="form-select prodi">
-                                            <option selected disabled>Pilih Prodi</option>
-                                            <option value="Teknik Informatika">Teknik Informatika</option>
-                                            <option value="Teknik Elektro">Teknik Elektro</option>
-                                            <option value="Teknik Perkapalan">Teknik Perkapalan</option>
-                                            <option value="Kimia">Kimia</option>
-                                            <option value="Teknik Industri">Teknik Industri</option>
+                                        <select class="form-select prodi" onchange="updateMataKuliah(this)">
+                                            <option value="" disabled selected>Pilih jurusan</option>
+                                            <?php foreach ($prodi as $p): ?>
+                                                <option value="<?= $p['id'] ?>"><?= $p['nama_jurusan'] ?></option>
+                                            <?php endforeach; ?>
                                         </select>
                                     </td>
                                     <td>
+                                        <select class="form-select mata-kuliah" onchange="updateKodeMK(this)" disabled>
+                                            <option value="" disabled selected>Pilih Mata Kuliah</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="text" class="form-control kode" placeholder="Kode Mata Kuliah" readonly></td>
+                                    <td>
                                         <select class="form-select tahun">
-                                            <option selected disabled>Pilih Tahun Ajaran</option>
-                                            <option value="2020/2021">2020/2021</option>
-                                            <option value="2021/2022">2021/2022</option>
-                                            <option value="2022/2023">2022/2023</option>
-                                            <option value="2023/2024">2023/2024</option>
-                                            <option value="2024/2025">2024/2025</option>
-                                            <option value="2025/2026">2025/2026</option>
-                                            <option value="2026/2027">2026/2027</option>
+                                            <option disabled>Pilih Tahun Ajaran</option>
+                                            <?php foreach ($tahun_ajaran as $ta): ?>
+                                                <option value="<?= $ta ?>" <?= ($ta == $row['tahun_ajaran']) ? 'selected' : '' ?>><?= $ta ?></option>
+                                            <?php endforeach; ?>
                                         </select>
                                     </td>
                                     <td>
                                         <select class="form-select semester">
-                                            <option selected disabled>Pilih Semester</option>
-                                            <option value="Ganjil">Ganjil</option>
-                                            <option value="Genap">Genap</option>
+                                            <option disabled>Pilih Semester</option>
+                                            <option value="Ganjil" <?= ($row['semester'] == 'Ganjil') ? 'selected' : '' ?>>Ganjil</option>
+                                            <option value="Genap" <?= ($row['semester'] == 'Genap') ? 'selected' : '' ?>>Genap</option>
                                         </select>
                                     </td>
-                                    <td><input type="text" class="form-control kelas" placeholder="Kelas"></td>
+                                    <td><input type="text" class="form-control kelas" placeholder="Kelas" value="<?= $row['kelas'] ?>"></td>
                                     <td><i class="bi bi-trash3-fill trash-icon" onclick="hapusBaris(this)" style="cursor: pointer;"></i></td>
                                 </tr>
-                            </tbody>
-                        </table>
-                        <div class="text-center my-3">
-                            <button id="addRowButton" class="btn btn-primary">Tambah Baris</button>
-                        </div>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                    <div class="text-center my-3">
+                        <button id="addRowButton" class="btn btn-primary">Tambah Baris</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    </div>
 
     <script>
         // Key untuk menyimpan data di localStorage
         const tableKey = "tableData";
+
+        // Store all mata kuliah data grouped by jurusan
+        const mataKuliahData = <?= json_encode($mata_kuliah) ?>;
+
+        // Function to update mata kuliah dropdown based on selected jurusan
+        function updateMataKuliah(prodiSelect) {
+            const row = prodiSelect.closest('tr');
+            const mataKuliahSelect = row.querySelector('.mata-kuliah');
+            const kodeInput = row.querySelector('.kode');
+            const selectedJurusanId = prodiSelect.value;
+
+            // Reset mata kuliah dropdown and kode
+            mataKuliahSelect.innerHTML = '<option value="" disabled selected>Pilih Mata Kuliah</option>';
+            kodeInput.value = '';
+
+            if (selectedJurusanId) {
+                // Filter mata kuliah for selected jurusan
+                const filteredMataKuliah = mataKuliahData.filter(mk => mk.id_jurusan === selectedJurusanId);
+
+                // Populate mata kuliah dropdown
+                filteredMataKuliah.forEach(mk => {
+                    const option = document.createElement('option');
+                    option.value = mk.nama_mk;
+                    option.setAttribute('data-kode', mk.kode_mk);
+                    option.textContent = mk.nama_mk;
+                    mataKuliahSelect.appendChild(option);
+                });
+
+                // Enable mata kuliah select
+                mataKuliahSelect.disabled = false;
+            } else {
+                // Disable mata kuliah select if no jurusan selected
+                mataKuliahSelect.disabled = true;
+            }
+        }
+
+        // Function to update kode MK when mata kuliah is selected
+        function updateKodeMK(selectElement) {
+            const selectedOption = selectElement.options[selectElement.selectedIndex];
+            const kodeMK = selectedOption.getAttribute('data-kode');
+            const row = selectElement.closest('tr');
+            const kodeInput = row.querySelector('.kode');
+            kodeInput.value = kodeMK;
+        }
+
+        // Function to add new row
+        function tambahBaris() {
+            const tbody = document.querySelector("tbody");
+            const maxRows = 100000;
+
+            if (tbody.rows.length >= maxRows) {
+                alert("Maksimal baris yang diperbolehkan telah tercapai!");
+                return;
+            }
+
+            const rowCount = tbody.rows.length + 1;
+            const newRow = document.createElement('tr');
+
+            // Get prodi options from the first row and clone them
+            const prodiOptions = Array.from(document.querySelector('.prodi').options)
+                .map(opt => `<option value="${opt.value}" ${opt.disabled ? 'disabled' : ''}>${opt.text}</option>`)
+                .join('');
+
+            newRow.innerHTML = `
+                <td>${rowCount}</td>
+                <td><a href="#" onclick="passData(event, ${rowCount})" class="btn btn-sm btn-outline-primary btn-full-width">Upload RPS</a></td>
+                <td>
+                    <select class="form-select prodi" onchange="updateMataKuliah(this)">
+                        ${prodiOptions}
+                    </select>
+                </td>
+                <td>
+                    <select class="form-select mata-kuliah" onchange="updateKodeMK(this)" disabled>
+                        <option value="" disabled selected>Pilih Mata Kuliah</option>
+                    </select>
+                </td>
+                <td><input type="text" class="form-control kode" placeholder="Kode Mata Kuliah" readonly></td>
+                <td>
+                    <select class="form-select tahun">
+                        <option selected disabled>Pilih Tahun Ajaran</option>
+                        <?php foreach ($tahun_ajaran as $ta): ?>
+                            <option value="<?= $ta ?>"><?= $ta ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </td>
+                <td>
+                    <select class="form-select semester">
+                        <option selected disabled>Pilih Semester</option>
+                        <option value="Ganjil">Ganjil</option>
+                        <option value="Genap">Genap</option>
+                    </select>
+                </td>
+                <td><input type="text" class="form-control kelas" placeholder="Kelas"></td>
+                <td><i class="bi bi-trash3-fill trash-icon" onclick="hapusBaris(this)" style="cursor: pointer;"></i></td>
+            `;
+            tbody.appendChild(newRow);
+
+            saveTableData();
+        }
 
         // Fungsi untuk menyimpan data tabel ke localStorage
         function saveTableData() {
@@ -202,110 +268,12 @@
 
         // Event listener untuk tombol "Tambah Baris"
         document.addEventListener("DOMContentLoaded", function() {
-            loadTableData(); // Muat data tabel saat halaman dimuat
-
+            // Hapus loadTableData() untuk mencegah loading otomatis
             const addRowButton = document.getElementById("addRowButton");
             if (addRowButton) {
                 addRowButton.addEventListener("click", tambahBaris);
             }
         });
-
-        // Fungsi untuk memuat data tabel dari localStorage
-        function loadTableData() {
-            const storedData = JSON.parse(localStorage.getItem(tableKey) || "[]");
-            const tbody = document.querySelector("tbody");
-
-            tbody.innerHTML = ""; // Kosongkan tabel sebelum memuat
-            storedData.forEach((data, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td>${index}</td>
-                    <td><a href="#" onclick="passData(event, ${index + 1})" class="btn btn-sm btn-outline-primary btn-full-width">Upload RPS</a></td>
-                    <td><input type="text" class="form-control mata-kuliah" value="${data.mataKuliah || ''}" placeholder="Mata Kuliah"></td>
-                    <td><input type="text" class="form-control kode" value="${data.kode || ''}" placeholder="Kode Mata Kuliah"></td>
-                    <td>
-                        <select class="form-select prodi">
-                            <option value="" disabled ${data.prodi === "" ? "selected" : ""}>Pilih Prodi</option>
-                            <option value="Teknik Informatika" ${data.prodi === "Teknik Informatika" ? "selected" : ""}>Teknik Informatika</option>
-                            <option value="Teknik Elektro" ${data.prodi === "Teknik Elektro" ? "selected" : ""}>Teknik Elektro</option>
-                            <option value="Teknik Perkapalan" ${data.prodi === "Teknik Perkapalan" ? "selected" : ""}>Teknik Perkapalan</option>
-                            <option value="Kimia" ${data.prodi === "Kimia" ? "selected" : ""}>Kimia</option>
-                            <option value="Teknik Industri" ${data.prodi === "Teknik Industri" ? "selected" : ""}>Teknik Industri</option>
-                        </select>
-                    </td>
-                    <td>
-                        <select class="form-select tahun">
-                            <option selected disabled>Pilih Tahun Ajaran</option>
-                            <option value="2020/2021" ${data.tahun === '2020/2021' ? 'selected' : ''}>2020/2021</option>
-                            <option value="2021/2022" ${data.tahun === '2021/2022' ? 'selected' : ''}>2021/2022</option>
-                            <option value="2022/2023" ${data.tahun === '2022/2023' ? 'selected' : ''}>2022/2023</option>
-                            <option value="2023/2024" ${data.tahun === '2023/2024' ? 'selected' : ''}>2023/2024</option>
-                            <option value="2024/2025" ${data.tahun === '2024/2025' ? 'selected' : ''}>2024/2025</option>
-                            <option value="2025/2026" ${data.tahun === '2025/2026' ? 'selected' : ''}>2025/2026</option>
-                            <option value="2026/2027" ${data.tahun === '2026/2027' ? 'selected' : ''}>2026/2027</option>
-                        </select>
-                    </td>
-                    <td>
-                        <select class="form-select semester">
-                            <option selected disabled>Pilih Semester</option>
-                            <option value="Ganjil" ${data.semester === 'Ganjil' ? 'selected' : ''}>Ganjil</option>
-                            <option value="Genap" ${data.semester === 'Genap' ? 'selected' : ''}>Genap</option>
-                        </select>
-                    </td>
-                    <td><input type="text" class="form-control kelas" value="${data.kelas || ''}" placeholder="Kelas"></td>
-                    <td><i class="bi bi-trash3-fill trash-icon" onclick="hapusBaris(this)" style="cursor: pointer;"></i></td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-
-        // Fungsi untuk menambah baris baru di tabel
-        function tambahBaris() {
-            const tbody = document.querySelector("tbody");
-            const rowCount = tbody.rows.length + 1;
-
-            const newRow = document.createElement('tr');
-            newRow.innerHTML = `
-                <td>${rowCount}</td>
-                <td><a href="#" onclick="passData(event, ${rowCount})" class="btn btn-sm btn-outline-primary btn-full-width">Upload RPS</a></td>
-                <td><input type="text" class="form-control mata-kuliah" placeholder="Mata Kuliah"></td>
-                <td><input type="text" class="form-control kode" placeholder="Kode Mata Kuliah"></td>
-                <td>
-                    <select class="form-select prodi">
-                        <option value="" disabled selected>Pilih Prodi</option>
-                        <option value="Teknik Informatika">Teknik Informatika</option>
-                        <option value="Teknik Elektro">Teknik Elektro</option>
-                        <option value="Teknik Perkapalan">Teknik Perkapalan</option>
-                        <option value="Kimia">Kimia</option>
-                        <option value="Teknik Industri">Teknik Industri</option>
-                    </select>
-                </td>
-                <td>
-                    <select class="form-select tahun">
-                        <option selected disabled>Pilih Tahun Ajaran</option>
-                        <option value="2020/2021">2020/2021</option>
-                        <option value="2021/2022">2021/2022</option>
-                        <option value="2022/2023">2022/2023</option>
-                        <option value="2023/2024">2023/2024</option>
-                        <option value="2024/2025">2024/2025</option>
-                        <option value="2025/2026">2025/2026</option>
-                        <option value="2026/2027">2026/2027</option>
-                    </select>
-                </td>
-                <td>
-                    <select class="form-select semester">
-                        <option selected disabled>Pilih Semester</option>
-                        <option value="Ganjil">Ganjil</option>
-                        <option value="Genap">Genap</option>
-                    </select>
-                </td>
-                <td><input type="text" class="form-control kelas" placeholder="Kelas"></td>
-                <td><i class="bi bi-trash3-fill trash-icon" onclick="hapusBaris(this)" style="cursor: pointer;"></i></td>
-            `;
-            tbody.appendChild(newRow);
-
-            saveTableData(); // Simpan data ke localStorage
-        }
 
         // Fungsi untuk menghapus baris tertentu
         function hapusBaris(button) {
@@ -318,7 +286,7 @@
         function updateRowNumbers() {
             const tableRows = document.querySelectorAll("tbody tr");
             tableRows.forEach((row, index) => {
-                row.querySelector('td:first-child').textContent = index + 1; // Perbarui nomor baris
+                row.querySelector('td:first-child').textContent = index + 1;
             });
         }
 
@@ -326,7 +294,6 @@
         function passData(event, rowNum) {
             event.preventDefault();
 
-            // Simpan data ke localStorage sebelum berpindah halaman
             saveTableData();
 
             const row = document.querySelectorAll('tbody tr')[rowNum - 1];
@@ -352,31 +319,34 @@
             const tahunAjaranPilihan = document.querySelector('.form-select[aria-label="Select Academic Year"]').value;
 
             const rows = document.querySelectorAll('tbody tr');
-            let found = false; // Flag untuk memeriksa apakah ada baris yang cocok
+            let found = false;
 
             rows.forEach(row => {
                 const mataKuliah = row.querySelector('.mata-kuliah').value;
                 const semester = row.querySelector('.semester').value;
                 const tahun = row.querySelector('.tahun').value;
 
-                // Periksa apakah semua filter yang dipilih cocok
                 const isMataKuliahMatch = mataKuliahPilihan === "Pilih Mata Kuliah" || mataKuliah === mataKuliahPilihan;
                 const isSemesterMatch = semesterPilihan === "Pilih Semester" || semester === semesterPilihan;
                 const isTahunMatch = tahunAjaranPilihan === "Pilih Tahun Ajaran" || tahun === tahunAjaranPilihan;
 
-                // Tampilkan baris jika semua kondisi terpenuhi
                 if (isMataKuliahMatch && isSemesterMatch && isTahunMatch) {
                     row.style.display = '';
-                    found = true; // Set flag ke true jika ditemukan kecocokan
+                    found = true;
                 } else {
                     row.style.display = 'none';
                 }
             });
 
-            // Tampilkan alert jika tidak ada data yang ditemukan
             if (!found) {
                 alert("Data tidak ditemukan!");
             }
+        });
+
+        document.getElementById('mataKuliahSelect').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const kodeMk = selectedOption.value;
+            document.getElementById('kodeMkInput').value = kodeMk;
         });
     </script>
 
