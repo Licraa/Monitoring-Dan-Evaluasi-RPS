@@ -7,73 +7,102 @@ document
       .classList.toggle("sidebar-collapsed");
   });
 
-// Fungsi untuk menampilkan atau menyembunyikan submenu RPS
+// Fungsi untuk menampilkan atau menyembunyikan submenu RPS dan BAP
 document.addEventListener("DOMContentLoaded", function () {
+  // Elemen untuk submenu RPS
   const menuRPS = document.getElementById("menuRPS");
   const unggahRpsMenu = document.getElementById("unggahRpsMenu");
   const daftarUploadRpsMenu = document.getElementById("daftarUploadRpsMenu");
-  const chevronIcon = document.querySelector("#menuRPS .chevron-icon");
-  const cardRPS = document.querySelector(
-    '.custom-card-link[href="unggah-rps.html"]'
-  );
+  const chevronIconRPS = document.querySelector("#menuRPS .chevron-icon");
 
-  // Set initial visibility based on localStorage
-  const isSubmenuVisible = localStorage.getItem("submenuVisible") === "true";
-  unggahRpsMenu.style.display = isSubmenuVisible ? "block" : "none";
-  daftarUploadRpsMenu.style.display = isSubmenuVisible ? "block" : "none";
-  chevronIcon.classList.toggle("bi-chevron-down", isSubmenuVisible);
-  chevronIcon.classList.toggle("bi-chevron-left", !isSubmenuVisible);
+  // Elemen untuk submenu BAP
+  const menuBAP = document.getElementById("menuBAP");
+  const isiBapMenu = document.getElementById("isiBapMenu");
+  const daftarBapMenu = document.getElementById("daftarBapMenu");
+  const chevronIconBAP = document.querySelector("#menuBAP .chevron-icon");
 
-  // Toggle submenu and save state in localStorage
+  // Set initial visibility berdasarkan localStorage
+  const isRPSSubmenuVisible =
+    localStorage.getItem("submenuRPSVisible") === "true";
+  const isBAPSubmenuVisible =
+    localStorage.getItem("submenuBAPVisible") === "true";
+
+  // Inisialisasi visibilitas submenu RPS
+  [unggahRpsMenu, daftarUploadRpsMenu].forEach((subMenu) => {
+    subMenu.style.display = isRPSSubmenuVisible ? "block" : "none";
+  });
+  chevronIconRPS.classList.toggle("bi-chevron-down", isRPSSubmenuVisible);
+  chevronIconRPS.classList.toggle("bi-chevron-left", !isRPSSubmenuVisible);
+
+  // Inisialisasi visibilitas submenu BAP
+  [isiBapMenu, daftarBapMenu].forEach((subMenu) => {
+    subMenu.style.display = isBAPSubmenuVisible ? "block" : "none";
+  });
+  chevronIconBAP.classList.toggle("bi-chevron-down", isBAPSubmenuVisible);
+  chevronIconBAP.classList.toggle("bi-chevron-left", !isBAPSubmenuVisible);
+
+  // Toggle submenu RPS dan simpan status di localStorage
   menuRPS.addEventListener("click", function (event) {
     event.preventDefault();
     const isHidden = unggahRpsMenu.style.display === "none";
 
-    // Update visibility and classes
-    unggahRpsMenu.style.display = isHidden ? "block" : "none";
-    daftarUploadRpsMenu.style.display = isHidden ? "block" : "none";
-    chevronIcon.classList.toggle("bi-chevron-left", !isHidden);
-    chevronIcon.classList.toggle("bi-chevron-down", isHidden);
+    [unggahRpsMenu, daftarUploadRpsMenu].forEach((subMenu) => {
+      subMenu.style.display = isHidden ? "block" : "none";
+    });
+    chevronIconRPS.classList.toggle("bi-chevron-left", !isHidden);
+    chevronIconRPS.classList.toggle("bi-chevron-down", isHidden);
 
-    // Save visibility state
-    localStorage.setItem("submenuVisible", isHidden);
+    localStorage.setItem("submenuRPSVisible", isHidden);
   });
 
-  // Prevent event bubbling for submenu items
+  // Toggle submenu BAP dan simpan status di localStorage
+  menuBAP.addEventListener("click", function (event) {
+    event.preventDefault();
+    const isHidden = isiBapMenu.style.display === "none";
+
+    [isiBapMenu, daftarBapMenu].forEach((subMenu) => {
+      subMenu.style.display = isHidden ? "block" : "none";
+    });
+    chevronIconBAP.classList.toggle("bi-chevron-left", !isHidden);
+    chevronIconBAP.classList.toggle("bi-chevron-down", isHidden);
+
+    localStorage.setItem("submenuBAPVisible", isHidden);
+  });
+
+  // Prevent bubbling untuk item submenu RPS
   unggahRpsMenu.addEventListener("click", function (event) {
     event.stopPropagation();
   });
-
   daftarUploadRpsMenu.addEventListener("click", function (event) {
     event.stopPropagation();
   });
 
-  // Handle click on the RPS card
-  cardRPS.addEventListener("click", function () {
-    // Ensure submenu "Unggah RPS" is visible
-    unggahRpsMenu.style.display = "block";
-    chevronIcon.classList.add("bi-chevron-down");
-    chevronIcon.classList.remove("bi-chevron-left");
-
-    // Add active class to submenu
-    unggahRpsMenu.classList.add("active-submenu");
-
-    // Save state in localStorage
-    localStorage.setItem("submenuVisible", true);
+  // Prevent bubbling untuk item submenu BAP
+  isiBapMenu.addEventListener("click", function (event) {
+    event.stopPropagation();
   });
-});
+  daftarBapMenu.addEventListener("click", function (event) {
+    event.stopPropagation();
+  });
 
-// Highlight active menu item based on current URL
-document.addEventListener("DOMContentLoaded", function () {
+  // Highlight aktif menu berdasarkan URL saat ini
   const currentUrl = window.location.pathname;
-  const unggahRpsMenu = document.getElementById("unggahRpsMenu");
 
-  // Reset active class before applying to prevent duplication
+  // Reset kelas aktif sebelum mengatur ulang
   const activeElements = document.querySelectorAll(".active-submenu");
   activeElements.forEach((el) => el.classList.remove("active-submenu"));
 
-  // Apply active class to the matching submenu item
+  // Terapkan kelas aktif untuk submenu RPS
   if (currentUrl.includes("unggah-rps.html")) {
     unggahRpsMenu.classList.add("active-submenu");
+  } else if (currentUrl.includes("daftar-upload-rps.html")) {
+    daftarUploadRpsMenu.classList.add("active-submenu");
+  }
+
+  // Terapkan kelas aktif untuk submenu BAP
+  if (currentUrl.includes("isi-bap.html")) {
+    isiBapMenu.classList.add("active-submenu");
+  } else if (currentUrl.includes("daftar-bap.html")) {
+    daftarBapMenu.classList.add("active-submenu");
   }
 });
