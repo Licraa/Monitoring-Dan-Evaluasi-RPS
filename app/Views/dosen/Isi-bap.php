@@ -23,7 +23,7 @@
             </div>
             <a href="/dosen" class="menu-item active">
                 <i class="bi bi-speedometer2"></i><span>Halaman Utama</span>
-            </a>\
+            </a>
 
             <a href="/dosen/menurps" class="menu-item" id="menuRPS">
                 <i class="bi bi-file-earmark-arrow-up-fill"></i><span>RPS</span>
@@ -59,7 +59,7 @@
             <!-- Right-aligned container for profile and notification icons -->
             <div class="right-icons">
                 <a href="profile.html" class="profile-link">
-                    <span class="admin-name"><?php echo user()->username ?></span>
+                    <span class="admin-name">Nama Dosen</span>
                     <i class="bi bi-person-fill"></i>
                 </a>
                 <a href="notifikasi-rps.html" class="notif">
@@ -81,7 +81,9 @@
                     <!-- Unggah RPS -->
                     <div class="bap-form-container">
                         <h2>Isi BAP (Berita Acara Perkuliahan)</h2>
-                        <form>
+                        <form action="<?= base_url('dosen/simpan_bap') ?>" method="POST">
+                            <?= csrf_field() ?>
+                            <input type="hidden" name="user_id" value="<?= user()->id ?>">
                             <div class="form-group">
                                 <label for="tanggal">Tanggal</label>
                                 <input type="date" id="tanggal" name="tanggal" required>
@@ -89,21 +91,20 @@
 
                             <div class="form-group">
                                 <label for="mata-kuliah">Mata Kuliah</label>
-                                <select id="mata-kuliah" name="mata-kuliah" required>
+                                <select id="mata-kuliah" name="kode_mk" required>
                                     <option value="">Pilih Mata Kuliah</option>
-                                    <option value="kalkulus">Kalkulus</option>
-                                    <option value="fisika">Fisika</option>
-                                    <!-- Tambahkan mata kuliah lainnya di sini -->
+                                    <?php if (isset($mata_kuliah) && is_array($mata_kuliah)): ?>
+                                        <?php foreach ($mata_kuliah as $mk): ?>
+                                            <option value="<?= esc($mk['kode_mk']) ?>">
+                                                <?= esc($mk['nama_mk']) ?> (<?= esc($mk['kode_mk']) ?>)
+                                            </option>
+                                        <?php endforeach; ?>
+                                    <?php endif; ?>
                                 </select>
                             </div>
 
                             <div class="form-group">
-                                <label for="topik">Kode Mata Kuliah</label>
-                                <input type="text" id="kodeMK" name="kodeMK" placeholder="Masukkan kode mata kuliah" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="topik">Tempat</label>
+                                <label for="tempat">Tempat</label>
                                 <input type="text" id="tempat" name="tempat" placeholder="Masukkan nama tempat" required>
                             </div>
 
@@ -112,22 +113,15 @@
                                 <div id="catatanReviewContainer">
                                     <div class="line-item">
                                         <span class="line-number">1.</span>
-                                        <input type="text" class="line-input" placeholder="Masukkan catatan..." />
-                                    </div>
-                                    <div class="line-item">
-                                        <span class="line-number">2.</span>
-                                        <input type="text" class="line-input" placeholder="Masukkan catatan..." />
-                                    </div>
-                                    <div class="line-item">
-                                        <span class="line-number">3.</span>
-                                        <input type="text" class="line-input" placeholder="Masukkan catatan..." />
+                                        <input type="text" class="line-input" name="catatan[]" placeholder="Masukkan catatan..." required />
+                                        <button type="button" class="delete-line-btn">x</button>
                                     </div>
                                 </div>
+                                <button type="button" id="addLineButton" class="add-line-btn">Tambah Baris</button>
                             </div>
 
                             <div class="button-group">
                                 <button type="submit" class="save-btn">Simpan BAP</button>
-                                <button type="button" id="downloadPdf" class="submit-btn">Download PDF</button>
                             </div>
                         </form>
                     </div>
@@ -136,127 +130,7 @@
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <p>&copy; 2024 Fakultas Teknik. All rights reserved.</p>
-    </footer>
-
-    <script src="js/dosen.js"></script>
-
-    <!-- Scripts for Bootstrap -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- jsPDF library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>
-
     <script>
-        document.getElementById('downloadPdf').addEventListener('click', function() {
-            // Ambil nilai dari form
-            const tanggal = document.getElementById('tanggal').value;
-            const mataKuliah = document.getElementById('mata-kuliah').value;
-            const kodeMK = document.getElementById('kodeMK').value;
-            const tempat = document.getElementById('tempat').value;
-
-            // Fungsi untuk mengonversi tanggal menjadi hari
-            function getDayName(dateString) {
-                const days = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
-                const date = new Date(dateString);
-                return days[date.getDay()];
-            }
-
-            // Mendapatkan hari dari tanggal
-            const hari = getDayName(tanggal);
-
-            // Ambil semua catatan review dari input dalam catatanReviewContainer
-            const catatanReviewElements = document.querySelectorAll('#catatanReviewContainer .line-input');
-            const catatanReview = Array.from(catatanReviewElements).map((input, index) => [
-                index + 1,
-                input.value
-            ]);
-
-            // Buat PDF
-            const {
-                jsPDF
-            } = window.jspdf;
-            const doc = new jsPDF();
-
-            // Tambahkan gambar logo di sudut kiri atas
-            const logoImg = new Image();
-            logoImg.src = 'LOGO_UMRAH_PNG.png'; // Pastikan path sesuai
-            logoImg.onload = function() {
-                doc.addImage(logoImg, 'PNG', 12, 11, 35, 35);
-
-                // Tambahkan judul dan informasi lainnya
-                doc.setFontSize(14);
-                doc.setFont("Times New Roman");
-                doc.text("KEMENTERIAN PENDIDIKAN, KEBUDAYAAN,", 65, 16);
-                doc.text("RISET, DAN TEKNOLOGI", 88, 23);
-                doc.text("UNIVERSITAS MARITIM RAJA ALI HAJI", 77, 31);
-
-                doc.setFontSize(14);
-                doc.setFont("Times New Roman", "bold");
-                doc.text("FAKULTAS TEKNIK DAN TEKNOLOGI KEMARITIMAN", 60, 39);
-
-                doc.setFontSize(10);
-                doc.setFont("Times New Roman", "normal");
-                doc.text("Jalan Politeknik Senggarang Telp. (0771) 4500097; Fax. (0771) 4500097", 69, 42);
-                doc.text("PO.BOX 155 – Tanjungpinang 29100", 92, 46);
-                doc.text("Website :http://fttk.umrah.ac.id/ e-mail : teknik@umrah.ac.id", 72, 50);
-
-                // Tambahkan garis hitam
-                doc.setDrawColor(0);
-                doc.setLineWidth(0.8);
-                doc.line(12, 52, 200, 52);
-
-                doc.setFont("Times New Roman", "bold");
-                doc.setFontSize(12);
-                doc.text("BERITA ACARA", 92, 65);
-                doc.text("REVIEW RENCANA PEMBELAJARAN SEMESTER (RPS)", 50, 71);
-
-                // Informasi form
-                doc.setFont("Times New Roman", "normal");
-                doc.setFontSize(10);
-                doc.text(`Hari/tanggal  : ${hari} / ${tanggal}`, 20, 85);
-                doc.text(`Tempat        : ${tempat}`, 20, 90);
-                doc.text(`Nama MK / Kode MK : ${mataKuliah} / ${kodeMK}`, 20, 95);
-                doc.text("Catatan review", 20, 103);
-
-                // Membuat tabel catatan review menggunakan autoTable
-                doc.autoTable({
-                    startY: 110, // Posisi awal tabel
-                    head: [
-                        ['No', 'Catatan Review']
-                    ],
-                    body: catatanReview,
-                    styles: {
-                        halign: 'left',
-                        valign: 'middle',
-                        fontSize: 10,
-                        lineWidth: 0.5,
-                        lineColor: [0, 0, 0]
-                    },
-                    headStyles: {
-                        fillColor: [255, 255, 255],
-                        textColor: [0, 0, 0]
-                    },
-                    columnStyles: {
-                        0: {
-                            cellWidth: 10
-                        },
-                        1: {
-                            cellWidth: 170
-                        }
-                    }
-                });
-
-                // Unduh PDF
-                doc.save("BAP_Review_RPS.pdf");
-            };
-        });
-
-
         const catatanReviewContainer = document.getElementById('catatanReviewContainer');
 
         function addNewLine() {
@@ -268,7 +142,8 @@
             newLineItem.classList.add('line-item');
             newLineItem.innerHTML = `
                 <span class="line-number">${newIndex}.</span>
-                <input type="text" class="line-input" placeholder="Masukkan catatan..." />
+                <input type="text" class="line-input" name="catatan[]" placeholder="Masukkan catatan..." required />
+                <button type="button" class="delete-line-btn">x</button>
             `;
 
             // Append new line item to container
@@ -280,6 +155,12 @@
 
             // Add event listener to the new input
             newInput.addEventListener('keypress', handleEnterKey);
+
+            // Add event listener to the delete button
+            newLineItem.querySelector('.delete-line-btn').addEventListener('click', function() {
+                newLineItem.remove();
+                updateLineNumbers();
+            });
         }
 
         // Event listener for Enter key
@@ -290,12 +171,79 @@
             }
         }
 
+        // Update line numbers after a line is removed
+        function updateLineNumbers() {
+            const lineItems = catatanReviewContainer.getElementsByClassName('line-item');
+            Array.from(lineItems).forEach((item, index) => {
+                item.querySelector('.line-number').textContent = `${index + 1}.`;
+            });
+        }
+
         // Add the initial event listeners
         document.querySelectorAll('.line-input').forEach(input => {
             input.addEventListener('keypress', handleEnterKey);
         });
+
+        // Add event listener for the "Tambah Baris" button
+        document.getElementById('addLineButton').addEventListener('click', addNewLine);
+
+        // Add event listeners for existing delete buttons
+        document.querySelectorAll('.delete-line-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                button.parentElement.remove();
+                updateLineNumbers();
+            });
+        });
+
+        // Update event listener for form submission
+        document.querySelector('form').addEventListener('submit', function(event) {
+            // Get all input fields
+            const tanggal = document.getElementById('tanggal').value;
+            const mataKuliahSelect = document.getElementById('mata-kuliah');
+            const tempat = document.getElementById('tempat').value;
+            const catatanInputs = document.querySelectorAll('#catatanReviewContainer .line-input');
+
+            // Basic validation
+            if (!tanggal || !mataKuliahSelect.value || !tempat) {
+                event.preventDefault();
+                alert('Harap lengkapi semua data sebelum menyimpan.');
+                return;
+            }
+
+            // Validate catatan
+            let isValid = true;
+            catatanInputs.forEach(input => {
+                if (!input.value.trim()) {
+                    isValid = false;
+                }
+            });
+
+            if (!isValid) {
+                event.preventDefault();
+                alert('Harap isi semua catatan review.');
+                return;
+            }
+
+            // If all validations pass, form will submit normally
+        });
+
+        // Remove the old save-btn event listener if it exists
+        document.querySelector('.save-btn').removeEventListener('click', function() {});
     </script>
 
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2024 Fakultas Teknik. All rights reserved.</p>
+    </footer>
+
+    <script src="/js/dosen.js"></script>
+
+    <!-- Scripts for Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- jsPDF library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.13/jspdf.plugin.autotable.min.js"></script>
 </body>
 
 </html>

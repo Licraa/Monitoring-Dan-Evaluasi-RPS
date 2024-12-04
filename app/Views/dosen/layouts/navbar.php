@@ -9,7 +9,7 @@
     </div>
     <a href="/dosen" class="menu-item active">
       <i class="bi bi-speedometer2"></i><span>Halaman Utama</span>
-    </a>\
+    </a>
 
     <a href="/dosen/menurps" class="menu-item" id="menuRPS">
       <i class="bi bi-file-earmark-arrow-up-fill"></i><span>RPS</span>

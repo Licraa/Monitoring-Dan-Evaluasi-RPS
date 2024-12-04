@@ -8,6 +8,8 @@ use App\Models\JurusanModel;
 use Myth\Auth\Models\UserModel;
 use App\Models\UserDetailsModel;
 use App\Models\DaftarRpsModel;
+use App\Models\BapCatatanModel;
+use App\Models\BapModel;
 
 class dosenController extends BaseController
 {
@@ -18,6 +20,8 @@ class dosenController extends BaseController
   protected $userdetail;
   protected $db;
   protected $daftarRps;
+  protected $BapCatatan;
+  protected $Bap;
 
   public function __construct()
   {
@@ -28,6 +32,8 @@ class dosenController extends BaseController
     $this->user = new UserModel();
     $this->userdetail = new UserDetailsModel();
     $this->daftarRps = new DaftarRpsModel();
+    $this->Bap = new BapModel();
+    $this->BapCatatan = new BapCatatanModel();
   }
 
   public function dosen()
@@ -113,7 +119,66 @@ class dosenController extends BaseController
 
   public function bap()
   {
-    return view('dosen/isi-bap');
+    // Get current user's details
+    $userId = user_id();
+
+    // Get mata kuliah data using query builder
+    $mataKuliahQuery = $this->db->table('mata_kuliah')
+      ->select('mata_kuliah.kode_mk, mata_kuliah.nama_mk')
+      ->get();
+
+    $data['mata_kuliah'] = $mataKuliahQuery->getResultArray();
+
+    // Debug: Check if data is retrieved
+    // d($data['mata_kuliah']); // Uncomment this to see the data
+
+    return view('dosen/isi-bap', $data);
+  }
+
+  public function daftar_bap()
+  {
+    // Get current user ID
+    $userId = user_id();
+
+    // Debug: Print user ID
+    // echo "User ID: " . $userId . "<br>";
+
+    // Build the query
+    $query = $this->db->table('bap')
+      ->select('bap.*, mata_kuliah.nama_mk, bap.id as bap_id')
+      ->join('mata_kuliah', 'mata_kuliah.kode_mk = bap.kode_mk')
+      ->where('bap.user_id', $userId)
+      ->orderBy('bap.tanggal', 'DESC');
+
+    // Debug: Print the query
+    // echo $this->db->getLastQuery() . "<br>";
+
+    // Get the results
+    $data['bap_list'] = $query->get()->getResultArray();
+
+    // Debug: Print the results
+    // echo "<pre>";
+    // print_r($data['bap_list']);
+    // echo "</pre>";
+
+    // Get catatan for each BAP
+    if (!empty($data['bap_list'])) {
+      foreach ($data['bap_list'] as &$bap) {
+        $bap['catatan'] = $this->db->table('bap_catatan')
+          ->where('bap_id', $bap['bap_id'])
+          ->orderBy('urutan', 'ASC')
+          ->get()
+          ->getResultArray();
+      }
+    }
+
+    // Debug: Print final data
+    // echo "<pre>";
+    // print_r($data);
+    // echo "</pre>";
+    // die();
+
+    return view('dosen/daftar_bap', $data);
   }
 
   public function feedback()
@@ -227,5 +292,50 @@ class dosenController extends BaseController
     }
 
     return $this->response->setJSON(['success' => false]);
+  }
+
+  public function simpan_bap()
+  {
+    if (!$this->validate([
+      'tanggal' => 'required',
+      'kode_mk' => 'required',
+      'tempat' => 'required',
+      'catatan' => 'required',
+      'catatan.*' => 'required'
+    ])) {
+      return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+    }
+
+    $this->db->transStart();
+
+    try {
+      // Simpan data BAP utama
+      $bapData = [
+        'user_id' => user_id(),
+        'tanggal' => $this->request->getPost('tanggal'),
+        'kode_mk' => $this->request->getPost('kode_mk'),
+        'tempat' => $this->request->getPost('tempat')
+      ];
+
+      $this->Bap->insert($bapData);
+      $bapId = $this->Bap->insertID();
+
+      // Simpan catatan review
+      $catatan = $this->request->getPost('catatan');
+      foreach ($catatan as $index => $isi_catatan) {
+        $this->BapCatatan->insert([
+          'bap_id' => $bapId,
+          'catatan' => $isi_catatan,
+          'urutan' => $index + 1
+        ]);
+      }
+
+      $this->db->transCommit();
+      return redirect()->to('dosen/daftar_bap')->with('message', 'BAP berhasil disimpan');
+    } catch (\Exception $e) {
+      $this->db->transRollback();
+      log_message('error', $e->getMessage());
+      return redirect()->back()->withInput()->with('error', 'Gagal menyimpan BAP: ' . $e->getMessage());
+    }
   }
 }

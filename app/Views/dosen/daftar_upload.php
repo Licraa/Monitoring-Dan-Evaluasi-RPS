@@ -22,15 +22,15 @@
       </div>
       <a href="/dosen" class="menu-item active">
         <i class="bi bi-speedometer2"></i><span>Halaman Utama</span>
-      </a>\
+      </a>
 
-      <a href="#" class="menu-item" id="menuRPS">
+      <a href="/dosen/menurps" class="menu-item" id="menuRPS">
         <i class="bi bi-file-earmark-arrow-up-fill"></i><span>RPS</span>
         <i class="bi bi-chevron-left chevron-icon float-end"></i>
       </a>
 
       <a href="/dosen/unggah-rps" class="menu-item submenu-item" id="unggahRpsMenu" style="display: none;"><span>Unggah RPS</span></a>
-      <a href="/dosen/daftar_upload" class="menu-item submenu-item" id="daftarUploadRpsMenu" style="display: none;"><span>Daftar Upload RPS</span></a>
+      <a href="dosen/daftar_upload" class="menu-item submenu-item" id="daftarUploadRpsMenu" style="display: none;"><span>Daftar Upload RPS</span></a>
       <a href="#" class="menu-item" id="menuBAP">
         <i class="bi bi-file-earmark-pdf-fill"></i><span>BAP</span>
         <i class="bi bi-chevron-left chevron-icon float-end"></i>
@@ -48,6 +48,8 @@
       <a href="/logout" class="menu-item">
         <i class="bi bi-box-arrow-left"></i><span>Keluar</span>
       </a>
+
+    </nav>
 
     </nav>
 
