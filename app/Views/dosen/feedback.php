@@ -203,8 +203,8 @@
                                                             class="btn btn-sm btn-info view-feedback"
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#feedbackModal"
-                                                            data-catatan-gpm="<?= esc($review->catatan_gpm ?: '') ?>"
-                                                            data-catatan-kajur="<?= esc($review->catatan_kajur ?: '') ?>">
+                                                            data-catatan-gpm="<?= esc($review->catatan_gpm ?: 'Belum ada catatan') ?>"
+                                                            data-catatan-kajur="<?= esc($review->catatan_kajur ?: 'Belum ada catatan') ?>">
                                                             <i class="bi bi-eye"></i> Lihat Catatan
                                                         </button>
                                                     <?php else: ?>
@@ -269,14 +269,14 @@
             });
 
             // Handle modal feedback
-            $('.view-feedback').click(function() {
-                const catatanGpm = $(this).data('catatan-gpm');
-                const catatanKajur = $(this).data('catatan-kajur');
+            // $('.view-feedback').click(function() {
+            //     const catatanGpm = $(this).data('catatan-gpm');
+            //     const catatanKajur = $(this).data('catatan-kajur');
 
-                // Ensure default text if no notes
-                $('#feedbackTextGpm').text(catatanGpm || '');
-                $('#feedbackTextKajur').text(catatanKajur || '');
-            });
+            //     // Ensure default text if no notes
+            //     $('#feedbackTextGpm').text(catatanGpm || '');
+            //     $('#feedbackTextKajur').text(catatanKajur || '');
+            // });
         });
     </script>
 
@@ -323,6 +323,22 @@
             margin-bottom: 5px;
         }
     </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle modal feedback
+            const viewFeedbackButtons = document.querySelectorAll('.view-feedback');
+            viewFeedbackButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const catatanGpm = this.getAttribute('data-catatan-gpm');
+                    const catatanKajur = this.getAttribute('data-catatan-kajur');
+
+                    document.getElementById('feedbackTextGpm').textContent = catatanGpm;
+                    document.getElementById('feedbackTextKajur').textContent = catatanKajur;
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>
