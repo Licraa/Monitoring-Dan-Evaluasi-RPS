@@ -29,7 +29,7 @@
                 <i class="bi bi-chevron-left chevron-icon float-end"></i>
             </a>
             <a href="/dosen/unggah-rps" class="menu-item submenu-item" id="unggahRpsMenu" style="display: none;"><span>Unggah RPS</span></a>
-            <a href="dosen/daftar_upload" class="menu-item submenu-item" id="daftarUploadRpsMenu" style="display: none;"><span>Daftar Upload RPS</span></a>
+            <a href="/dosen/daftar_upload" class="menu-item submenu-item" id="daftarUploadRpsMenu" style="display: none;"><span>Daftar Upload RPS</span></a>
 
             <a href="#" class="menu-item" id="menuBAP">
                 <i class="bi bi-file-earmark-pdf-fill"></i><span>BAP</span>
@@ -42,7 +42,7 @@
             <a href="/dosen/feedback" class="menu-item">
                 <img src="/img/feedback.png" alt="Feedback Icon" class="feedback-icon"><span>Feedback RPS</span>
             </a>
-            <a href="dosen/notifikasi-rps" class="menu-item">
+            <a href="/dosen/notifikasi-rps" class="menu-item">
                 <i class="bi bi-bell-fill"></i><span>Notifikasi</span>
             </a>
             <a href="/logout" class="menu-item">

@@ -13,6 +13,8 @@ use App\Models\BapModel;
 use App\Models\MataKuliahModel;
 use App\Models\UnsurModel;
 use App\Models\ReviewRpsModel;
+use Myth\Auth\Models\GroupModel;
+
 
 class GpmController extends BaseController
 {
@@ -27,6 +29,7 @@ class GpmController extends BaseController
   protected $mataKuliahModel;
   protected $unsurModel;
   protected $reviewModel;
+  protected $groupModel;
   public function __construct()
   {
     $this->rpsModel = new RpsModel();
@@ -40,6 +43,12 @@ class GpmController extends BaseController
     $this->mataKuliahModel = new MataKuliahModel();
     $this->unsurModel = new UnsurModel();
     $this->reviewModel = new ReviewRpsModel();
+    $this->groupModel = new GroupModel();
+  }
+
+  public function dashboard_kajur()
+  {
+    return view('kajur/dashboard_kajur');
   }
 
   public function dashboard_gpm()
@@ -78,64 +87,111 @@ class GpmController extends BaseController
   public function saveReview()
   {
     try {
-      // Debug: Tampilkan semua data POST yang diterima
-      log_message('debug', 'POST Data: ' . print_r($this->request->getPost(), true));
-
       $daftarRpsId = $this->request->getPost('daftar_rps_id');
       $statuses = $this->request->getPost('status');
       $catatan = $this->request->getPost('catatan');
+      $userId = user()->id;
 
-      if (!$daftarRpsId || !$statuses) {
-        log_message('error', 'Missing required data: daftar_rps_id or statuses');
+      // Determine role
+      $reviewerRole = in_groups('kajur') ? 'kajur' : (in_groups('gpm') ? 'gpm' : null);
+
+      if (!$reviewerRole) {
         return $this->response->setJSON([
           'success' => false,
-          'message' => 'Data tidak lengkap'
+          'message' => 'Role tidak valid untuk melakukan review'
         ]);
       }
 
-      $userId = user_id(); // Menggunakan helper Myth/Auth untuk mendapatkan ID user
-      log_message('debug', 'User ID: ' . $userId);
+      // Check if GPM has reviewed (only for Kajur)
+      if ($reviewerRole === 'kajur') {
+        $gpmReview = $this->reviewModel->where('daftar_rps_id', $daftarRpsId)
+          ->where('reviewer_role', 'gpm')
+          ->first();
+        if (!$gpmReview) {
+          return $this->response->setJSON([
+            'success' => false,
+            'message' => 'RPS harus direview oleh GPM terlebih dahulu'
+          ]);
+        }
+      }
+
+      $overallStatus = 'Sesuai'; // Default status
 
       foreach ($statuses as $unsurId => $status) {
         $reviewData = [
           'daftar_rps_id' => $daftarRpsId,
           'unsur_id' => $unsurId,
-          'review_gpm' => $status,
-          'catatan_gpm' => $catatan[$unsurId] ?? '',
-          'reviewer_role' => 'gpm',
           'reviewer_id' => $userId,
-          'status' => $status // Status final sama dengan review GPM
+          'reviewer_role' => $reviewerRole,
         ];
 
-        log_message('debug', 'Review Data for unsur ' . $unsurId . ': ' . print_r($reviewData, true));
+        // Set review status based on role
+        if ($reviewerRole === 'kajur') {
+          $reviewData['review_kajur'] = $status;
+          $reviewData['catatan_kajur'] = $catatan[$unsurId] ?? '';
+        } else {
+          $reviewData['review_gpm'] = $status;
+          $reviewData['catatan_gpm'] = $catatan[$unsurId] ?? '';
+        }
 
-        // Cek review yang sudah ada
+        // If any status is 'Revisi', set overall status to 'Revisi'
+        if ($status === 'Revisi') {
+          $overallStatus = 'Revisi';
+        }
+
+        // Update final status
+        $reviewData['status'] = $overallStatus;
+
         $existingReview = $this->reviewModel->where([
           'daftar_rps_id' => $daftarRpsId,
           'unsur_id' => $unsurId
         ])->first();
 
         if ($existingReview) {
-          log_message('debug', 'Updating existing review ID: ' . $existingReview->id);
           $this->reviewModel->update($existingReview->id, $reviewData);
         } else {
-          log_message('debug', 'Inserting new review');
           $this->reviewModel->insert($reviewData);
         }
       }
 
       return $this->response->setJSON([
         'success' => true,
-        'message' => 'Review berhasil disimpan'
+        'message' => 'Review berhasil disimpan sebagai ' . strtoupper($reviewerRole) .
+          ($overallStatus === 'Revisi' ? ' dengan status Revisi' : ' dengan status Sesuai')
       ]);
     } catch (\Exception $e) {
-      log_message('error', 'Error in saveReview: ' . $e->getMessage());
-      log_message('error', 'Stack trace: ' . $e->getTraceAsString());
-
       return $this->response->setJSON([
         'success' => false,
         'message' => 'Terjadi kesalahan: ' . $e->getMessage()
       ]);
+    }
+  }
+
+  // Add this helper method to check RPS status
+  public function checkRpsStatus($rpsId)
+  {
+    $reviews = $this->reviewModel->where('daftar_rps_id', $rpsId)->findAll();
+
+    $gpmApproved = true;
+    $kajurApproved = true;
+
+    foreach ($reviews as $review) {
+      if ($review->review_gpm === 'Revisi') {
+        $gpmApproved = false;
+      }
+      if ($review->review_kajur === 'Revisi') {
+        $kajurApproved = false;
+      }
+    }
+
+    if (!$gpmApproved) {
+      return 'Perlu Revisi (GPM)';
+    } elseif (!$kajurApproved) {
+      return 'Perlu Revisi (Kajur)';
+    } elseif ($gpmApproved && $kajurApproved) {
+      return 'Selesai';
+    } else {
+      return 'Dalam Proses';
     }
   }
 }

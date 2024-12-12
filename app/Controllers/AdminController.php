@@ -11,7 +11,6 @@ use App\Models\JurusanModel;
 use App\Models\AuthGroupsUsersModel;
 use Myth\Auth\Entities\User;
 
-
 class AdminController extends BaseController
 {
     protected $unsur;
@@ -54,9 +53,8 @@ class AdminController extends BaseController
 
     public function tambah()
     {
-        // Ambil data fakultas dan jurusan dari model
-        $fakultas = $this->fakultas->findAll();  // Mengambil semua data fakultas
-        $jurusan = $this->jurusan->findAll();  // Mengambil semua data jurusan
+        $fakultas = $this->fakultas->findAll();
+        $jurusan = $this->jurusan->findAll();
         $roles = $this->auths->findAll();
 
         return view('admin-db/tambah', [
@@ -68,7 +66,6 @@ class AdminController extends BaseController
 
     public function adduser()
     {
-        // Validasi input
         if (!$this->validate([
             'username' => 'required',
             'email' => 'required|valid_email',
@@ -82,19 +79,15 @@ class AdminController extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        // Buat user baru dengan entitas Myth\Auth\Entities\User
         $dataUser = new User();
         $dataUser->username = $this->request->getPost('username');
         $dataUser->email = $this->request->getPost('email');
-        $dataUser->setPassword($this->request->getPost('password'));  // Hashing password otomatis
-        $dataUser->active = 1; // Set user aktif
+        $dataUser->setPassword($this->request->getPost('password'));
+        $dataUser->active = 1;
 
-        // Simpan data ke tabel users melalui model UserModel
         if ($this->user->save($dataUser)) {
-            // Ambil ID user yang baru disimpan
             $userId = $this->user->getInsertID();
 
-            // Data untuk tabel users_details
             $dataUserDetails = [
                 'user_id' => $userId,
                 'nama' => $this->request->getPost('nama'),
@@ -103,17 +96,13 @@ class AdminController extends BaseController
                 'jurusan_id' => $this->request->getPost('jurusan_id'),
             ];
 
-            // Simpan data ke tabel users_details
             if ($this->userdetail->save($dataUserDetails)) {
-                // Menambahkan user ke dalam role/group
                 $roleId = $this->request->getPost('role_id');
-                error_log("Role ID: " . $roleId);
                 $dataAuthGroup = [
                     'user_id' => $userId,
                     'group_id' => $roleId,
                 ];
 
-                // Simpan data ke tabel auth_groups_users
                 if ($this->authgroup->save($dataAuthGroup)) {
                     return redirect()->to('/akun')->with('message', 'Pengguna berhasil ditambahkan');
                 } else {
@@ -131,6 +120,7 @@ class AdminController extends BaseController
     {
         return view('admin-db/tambahrp');
     }
+
     public function addrp()
     {
         $data = [
@@ -141,19 +131,15 @@ class AdminController extends BaseController
             'unsur' => 'required',
             'keterangan' => 'required'
         ])) {
-            // Simpan data ke database
             $this->unsur->save($data);
-            // Redirect atau tampilkan pesan sukses
             return redirect()->to('/rps')->with('message', 'Data berhasil disimpan');
         } else {
-            // Jika validasi gagal
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
     }
 
     public function edit($id = null)
     {
-        // Validasi ID pengguna yang akan diedit
         $user = $this->user->find($id);
         if (!$user) {
             return redirect()->back()->with('errors', 'Pengguna tidak ditemukan');
@@ -164,13 +150,12 @@ class AdminController extends BaseController
             return redirect()->back()->with('errors', 'Detail pengguna tidak ditemukan');
         }
 
-        // Ambil data pengguna berdasarkan ID
         $data = [
             'user' => $user,
             'userdetail' => $userDetail,
-            'fakultas' => $this->fakultas->findAll(),  // Mengambil semua data fakultas
-            'jurusan' => $this->jurusan->findAll(),    // Mengambil semua data jurusan
-            'roles' => $this->auths->findAll()         // Mengambil semua data role
+            'fakultas' => $this->fakultas->findAll(),
+            'jurusan' => $this->jurusan->findAll(),
+            'roles' => $this->auths->findAll()
         ];
 
         return view('admin-db/edit', $data);
@@ -178,7 +163,6 @@ class AdminController extends BaseController
 
     public function updateUser($id = null)
     {
-        // Validasi input
         if (!$this->validate([
             'username' => 'required',
             'email' => 'required|valid_email',
@@ -191,7 +175,6 @@ class AdminController extends BaseController
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
 
-        // Update data di tabel users
         $dataUser = [
             'username' => $this->request->getPost('username'),
             'email' => $this->request->getPost('email'),
@@ -199,7 +182,6 @@ class AdminController extends BaseController
 
         $this->user->update($id, $dataUser);
 
-        // Update data di tabel users_details
         $dataUserDetail = [
             'nama' => $this->request->getPost('nama'),
             'nidn' => $this->request->getPost('nidn'),
@@ -209,7 +191,6 @@ class AdminController extends BaseController
 
         $this->userdetail->where('user_id', $id)->set($dataUserDetail)->update();
 
-        // Update role pengguna
         $roleId = $this->request->getPost('role_id');
         $this->authgroup->where('user_id', $id)->set(['group_id' => $roleId])->update();
 
@@ -219,14 +200,15 @@ class AdminController extends BaseController
     public function deleteuser($id = null)
     {
         $this->user->where('id', $id)->delete();
-        // Redirect atau tampilkan pesan sukses
         return redirect()->to('/akun')->with('message', 'Data berhasil dihapus');
     }
-
 
     public function editrp($id = null)
     {
         $data['unsurs'] = $this->unsur->where('id_unsur', $id)->first();
+        if (!$data['unsurs']) {
+            return redirect()->back()->with('errors', 'Unsur tidak ditemukan');
+        }
         return view('admin-db/editrp', $data);
     }
 
@@ -237,16 +219,12 @@ class AdminController extends BaseController
             'keterangan' => $this->request->getPost('keterangan')
         ];
         if ($this->validate([
-            'unsur' => 'required',
-            'keterangan' => 'required'
-        ])) {
-            // Update data berdasarkan ID
-            $this->unsur->update($id, $data);
+            'unsur' => 'required'
 
-            // Redirect atau tampilkan pesan sukses
+        ])) {
+            $this->unsur->update($id, $data);
             return redirect()->to('/rps')->with('message', 'Data berhasil diperbaharui');
         } else {
-            // Jika validasi gagal
             return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
         }
     }
@@ -254,7 +232,6 @@ class AdminController extends BaseController
     public function deleterp($id = null)
     {
         $this->unsur->where('id_unsur', $id)->delete();
-        // Redirect atau tampilkan pesan sukses
         return redirect()->to('/rps')->with('message', 'Data berhasil dihapus');
     }
 

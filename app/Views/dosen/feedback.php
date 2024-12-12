@@ -29,7 +29,7 @@
                 <i class="bi bi-chevron-left chevron-icon float-end"></i>
             </a>
             <a href="/dosen/unggah-rps" class="menu-item submenu-item" id="unggahRpsMenu" style="display: none;"><span>Unggah RPS</span></a>
-            <a href="dosen/daftar_upload" class="menu-item submenu-item" id="daftarUploadRpsMenu" style="display: none;"><span>Daftar Upload RPS</span></a>
+            <a href="/dosen/daftar_upload" class="menu-item submenu-item" id="daftarUploadRpsMenu" style="display: none;"><span>Daftar Upload RPS</span></a>
 
             <a href="#" class="menu-item" id="menuBAP">
                 <i class="bi bi-file-earmark-pdf-fill"></i><span>BAP</span>
@@ -42,7 +42,7 @@
             <a href="/dosen/feedback" class="menu-item">
                 <img src="/img/feedback.png" alt="Feedback Icon" class="feedback-icon"><span>Feedback RPS</span>
             </a>
-            <a href="dosen/notifikasi_rps" class="menu-item">
+            <a href="/dosen/notifikasi_rps" class="menu-item">
                 <i class="bi bi-bell-fill"></i><span>Notifikasi</span>
             </a>
             <a href="/logout" class="menu-item">
@@ -72,33 +72,7 @@
             <header class="main-header">
                 <h1 class="h4">Home / Feedback RPS</h1>
             </header>
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <div class="input-group">
-                    <select class="form-select" aria-label="Select Mata Kuliah">
-                        <option selected>Kalkulus</option>
-                        <option value="1">Matematika Diskrit</option>
-                        <option value="2">Aljabar</option>
-                        <option value="3">Sistem Basis Data</option>
-                        <option value="4">PAA</option>
-                    </select>
-                    <select class="form-select" aria-label="Select Semester">
-                        <option selected>Ganjil</option>
-                        <option value="1">Genap</option>
-                    </select>
-                    <select class="form-select" aria-label="Select Academic Year">
-                        <option selected>2020/2021</option>
-                        <option value="1">2021/2022</option>
-                        <option value="2">2022/2023</option>
-                        <option value="3">2023/2024</option>
-                        <option value="4">2024/2025</option>
-                        <option value="5">2025/2026</option>
-                        <option value="6">2026/2027</option>
-                    </select>
-                    <button class="btn btn-outline-secondary">
-                        <i class="bi bi-search"></i>
-                    </button>
-                </div>
-            </div>
+
             <!-- Dashboard Cards -->
             <div class="container-fluid">
                 <div class="row justify-content-center">
@@ -159,20 +133,16 @@
                                         <?php foreach ($unsur_rps as $index => $unsur): ?>
                                             <?php
                                             $review = $reviews[$unsur->id_unsur] ?? null;
-                                            $statusGpm = $review ? $review->review_gpm : 'Belum diperiksa';
-                                            $statusKajur = $review ? $review->review_kajur : 'Belum diperiksa';
+                                            $statusGpm = $review ? ($review->review_gpm ?: 'Belum diperiksa') : 'Belum diperiksa';
+                                            $statusKajur = $review ? ($review->review_kajur ?: 'Belum diperiksa') : 'Belum diperiksa';
 
-                                            // Logika untuk status final
-                                            if ($statusGpm === 'Sesuai' && $statusKajur === 'Sesuai') {
-                                                $statusFinal = 'Sesuai';
-                                            } elseif ($statusGpm === 'Revisi' || $statusKajur === 'Revisi') {
-                                                $statusFinal = 'Revisi';
-                                            } elseif ($statusGpm === 'Revisi' || $statusKajur === 'Sesuai') {
-                                                $statusFinal = 'Revisi';
-                                            } elseif ($statusGpm === 'Sesuai' || $statusKajur === 'Revisi') {
-                                                $statusFinal = 'Revisi';
-                                            } else {
-                                                $statusFinal = 'Belum diperiksa';
+                                            $statusFinal = 'Belum diperiksa';
+                                            if ($statusGpm !== 'Belum diperiksa' || $statusKajur !== 'Belum diperiksa') {
+                                                if ($statusGpm === 'Sesuai' && $statusKajur === 'Sesuai') {
+                                                    $statusFinal = 'Sesuai';
+                                                } else if ($statusGpm === 'Revisi' || $statusKajur === 'Revisi') {
+                                                    $statusFinal = 'Revisi';
+                                                }
                                             }
 
                                             $gpmClass = strtolower(str_replace(' ', '-', $statusGpm));
@@ -296,11 +266,6 @@
             min-width: 120px;
         }
 
-        .status-badge.belum-diperiksa {
-            background-color: #6c757d;
-            color: white;
-        }
-
         .status-badge.sesuai {
             background-color: #28a745;
             color: white;
@@ -308,6 +273,11 @@
 
         .status-badge.revisi {
             background-color: #dc3545;
+            color: white;
+        }
+
+        .status-badge.belum-diperiksa {
+            background-color: #6c757d;
             color: white;
         }
 

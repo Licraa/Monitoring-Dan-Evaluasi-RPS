@@ -42,7 +42,7 @@
             <!-- Right-aligned container for profile and notification icons -->
             <div class="right-icons">
                 <a href="profile.html" class="profile-link">
-                    <span class="admin-name">Nama Dosen</span>
+                    <span class="admin-name"><?= user()->username ?></span>
                     <i class="bi bi-person-fill"></i>
                 </a>
                 <a href="notifikasi.html" class="notif">

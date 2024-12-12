@@ -24,11 +24,10 @@
                 <i class="bi bi-speedometer2"></i><span>Halaman Utama</span>
             </a>
 
-            <a href="#" class="menu-item" id="menuRPS">
+            <a href="/dosen/menurps" class="menu-item" id="menuRPS">
                 <i class="bi bi-file-earmark-arrow-up-fill"></i><span>RPS</span>
                 <i class="bi bi-chevron-left chevron-icon float-end"></i>
             </a>
-
             <a href="/dosen/unggah-rps" class="menu-item submenu-item" id="unggahRpsMenu" style="display: none;"><span>Unggah RPS</span></a>
             <a href="/dosen/daftar_upload" class="menu-item submenu-item" id="daftarUploadRpsMenu" style="display: none;"><span>Daftar Upload RPS</span></a>
 
@@ -36,14 +35,14 @@
                 <i class="bi bi-file-earmark-pdf-fill"></i><span>BAP</span>
                 <i class="bi bi-chevron-left chevron-icon float-end"></i>
             </a>
+            <a href="/dosen/isi_bap" class="menu-item submenu-item" id="isiBapMenu" style="display: none;"><span>Isi BAP</span></a>
+            <a href="/dosen/daftar_bap" class="menu-item submenu-item" id="daftarBapMenu" style="display: none;"><span>Daftar BAP</span></a>
 
-            <a href="/dosen/isi-bap" class="menu-item submenu-item" id="isiBapMenu" style="display: none;"><span>Isi BAP</span></a>
-            <a href="#" class="menu-item submenu-item" id="daftarBapMenu" style="display: none;"><span>Daftar BAP</span></a>
+
             <a href="/dosen/feedback" class="menu-item">
                 <img src="/img/feedback.png" alt="Feedback Icon" class="feedback-icon"><span>Feedback RPS</span>
             </a>
-
-            <a href="dosen/notifikasi-rps" class="menu-item">
+            <a href="/dosen/notifikasi_rps" class="menu-item">
                 <i class="bi bi-bell-fill"></i><span>Notifikasi</span>
             </a>
             <a href="/logout" class="menu-item">
@@ -58,7 +57,7 @@
             <!-- Right-aligned container for profile and notification icons -->
             <div class="right-icons">
                 <a href="profile.html" class="profile-link">
-                    <span class="admin-name">Nama Dosen</span>
+                    <span class="admin-name"><?= user()->username ?></span>
                     <i class="bi bi-person-fill"></i>
                 </a>
                 <a href="notifikasi-rps.html" class="notif">

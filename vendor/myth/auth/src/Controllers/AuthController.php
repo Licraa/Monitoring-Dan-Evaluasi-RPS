@@ -95,11 +95,11 @@ class AuthController extends Controller
 
         $userId = $this->auth->id(); // Mengambil ID pengguna yang sedang login
         $authorization = service('authorization'); // Service authorization
-    
+
         if ($authorization->inGroup('dosen', $userId)) {
             return redirect()->to('/dosen');
         } elseif ($authorization->inGroup('gpm', $userId)) {
-            return redirect()->to('/dashboard/dashboard_gpm');
+            return redirect()->to('/gpm');
         } elseif ($authorization->inGroup('admin', $userId)) {
             return redirect()->to('/admin');
         } elseif ($authorization->inGroup('kajur', $userId)) {

@@ -20,7 +20,10 @@ class ReviewRpsModel extends Model
     'catatan_gpm',
     'catatan_kajur',
     'review_gpm',
-    'review_kajur'
+    'review_kajur',
+    'reviewer_role',
+    'reviewer_id'
+
 
   ];
 
