@@ -10,6 +10,8 @@ use App\Models\UserDetailsModel;
 use App\Models\DaftarRpsModel;
 use App\Models\BapCatatanModel;
 use App\Models\BapModel;
+use App\Models\UnsurModel;
+use App\Models\ReviewRpsModel;
 
 class dosenController extends BaseController
 {
@@ -22,6 +24,8 @@ class dosenController extends BaseController
   protected $daftarRps;
   protected $BapCatatan;
   protected $Bap;
+  protected $unsurModel;
+  protected $reviewModel;
 
   public function __construct()
   {
@@ -34,6 +38,8 @@ class dosenController extends BaseController
     $this->daftarRps = new DaftarRpsModel();
     $this->Bap = new BapModel();
     $this->BapCatatan = new BapCatatanModel();
+    $this->unsurModel = new UnsurModel();
+    $this->reviewModel = new ReviewRpsModel();
   }
 
   public function dosen()
@@ -119,49 +125,30 @@ class dosenController extends BaseController
 
   public function bap()
   {
-    // Get current user's details
+
     $userId = user_id();
 
-    // Get mata kuliah data using query builder
     $mataKuliahQuery = $this->db->table('mata_kuliah')
       ->select('mata_kuliah.kode_mk, mata_kuliah.nama_mk')
       ->get();
 
     $data['mata_kuliah'] = $mataKuliahQuery->getResultArray();
 
-    // Debug: Check if data is retrieved
-    // d($data['mata_kuliah']); // Uncomment this to see the data
-
     return view('dosen/isi-bap', $data);
   }
 
   public function daftar_bap()
   {
-    // Get current user ID
     $userId = user_id();
 
-    // Debug: Print user ID
-    // echo "User ID: " . $userId . "<br>";
-
-    // Build the query
     $query = $this->db->table('bap')
       ->select('bap.*, mata_kuliah.nama_mk, bap.id as bap_id')
       ->join('mata_kuliah', 'mata_kuliah.kode_mk = bap.kode_mk')
       ->where('bap.user_id', $userId)
       ->orderBy('bap.tanggal', 'DESC');
 
-    // Debug: Print the query
-    // echo $this->db->getLastQuery() . "<br>";
-
-    // Get the results
     $data['bap_list'] = $query->get()->getResultArray();
 
-    // Debug: Print the results
-    // echo "<pre>";
-    // print_r($data['bap_list']);
-    // echo "</pre>";
-
-    // Get catatan for each BAP
     if (!empty($data['bap_list'])) {
       foreach ($data['bap_list'] as &$bap) {
         $bap['catatan'] = $this->db->table('bap_catatan')
@@ -172,21 +159,46 @@ class dosenController extends BaseController
       }
     }
 
-    // Debug: Print final data
-    // echo "<pre>";
-    // print_r($data);
-    // echo "</pre>";
-    // die();
-
     return view('dosen/daftar_bap', $data);
   }
 
   public function feedback()
   {
-    return view('dosen/feedback');
+    // Ambil ID dosen yang sedang login
+    $dosenId = user_id();
+
+    // Ambil daftar RPS dengan informasi lengkap
+    $data['daftar_rps'] = $this->db->table('daftar_rps')
+      ->select('daftar_rps.*, mata_kuliah.nama_mk, jurusan.nama_jurusan')
+      ->join('mata_kuliah', 'mata_kuliah.kode_mk = daftar_rps.kode_mk')
+      ->join('jurusan', 'jurusan.id = daftar_rps.jurusan_id')
+      ->where('daftar_rps.user_id', $dosenId)
+      ->get()
+      ->getResult();
+
+    // Ambil ID RPS yang dipilih dari query parameter
+    $selectedRpsId = $this->request->getGet('rps_id');
+
+    if ($selectedRpsId) {
+      // Ambil semua unsur RPS
+      $data['unsur_rps'] = $this->unsurModel->findAll();
+
+      // Gunakan ReviewRpsModel untuk mengambil review dengan catatan
+      $reviewModel = new \App\Models\ReviewRpsModel();
+      $reviews = $reviewModel->where('daftar_rps_id', $selectedRpsId)->findAll();
+
+      // Reorganisasi reviews berdasarkan unsur_id dengan tambahan penanganan catatan
+      $data['reviews'] = [];
+      foreach ($reviews as $review) {
+        $data['reviews'][$review->unsur_id] = $review;
+      }
+
+      $data['selected_rps_id'] = $selectedRpsId;
+    }
+
+    return view('dosen/feedback', $data);
   }
 
-  // Add new method to get mata kuliah by jurusan
   public function getMataKuliahByJurusan($jurusanId)
   {
     $mataKuliahQuery = $this->db->table('mata_kuliah')
@@ -199,7 +211,6 @@ class dosenController extends BaseController
     return $this->response->setJSON($mataKuliah);
   }
 
-  // Tambah method untuk menyimpan RPS
   public function simpan_rps()
   {
     if (!$this->validate([
@@ -226,7 +237,6 @@ class dosenController extends BaseController
     return redirect()->back()->withInput()->with('error', 'Gagal menyimpan RPS');
   }
 
-  // Tambah method untuk menghapus RPS
   public function hapus_rps($id)
   {
     $userId = user_id();
@@ -244,7 +254,6 @@ class dosenController extends BaseController
     return $this->response->setJSON(['success' => false]);
   }
 
-  // Tambah method untuk mendapatkan detail RPS
   public function get_rps($id)
   {
     $userId = user_id();
@@ -259,7 +268,6 @@ class dosenController extends BaseController
     return $this->response->setJSON($rps);
   }
 
-  // Tambah method untuk update RPS
   public function update_rps($id)
   {
     if (!$this->validate([
@@ -337,5 +345,15 @@ class dosenController extends BaseController
       log_message('error', $e->getMessage());
       return redirect()->back()->withInput()->with('error', 'Gagal menyimpan BAP: ' . $e->getMessage());
     }
+  }
+
+  public function profile_dosen()
+  {
+    return view('dosen/profile');
+  }
+
+  public function notifikasi_rps()
+  {
+    return view('dosen/notifikasi-rps');
   }
 }

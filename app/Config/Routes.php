@@ -8,9 +8,9 @@ use Kint\Zval\Value;
  */
 $routes->get('/', 'Home::index');
 
-$routes->get('/dashboard/dashboard_gpm', 'Dashboard::gpm', ['filter' => 'role:gpm']);
-$routes->get('/dashboard/dashboard_admin', 'Dashboard::admin', ['filter' => 'role:admin']);
-$routes->get('/dashboard/dashboard_kajur', 'Dashboard::kajur', ['filter' => 'role:kajur']);
+
+// $routes->get('/dashboard/dashboard_admin', 'Dashboard::admin', ['filter' => 'role:admin']);
+// $routes->get('/dashboard/dashboard_kajur', 'Dashboard::kajur', ['filter' => 'role:kajur']);
 
 
 // router admin 
@@ -38,7 +38,6 @@ $routes->get('profil', 'AdminController::profil');
 $routes->get('notif', 'AdminController::notif');
 // $routes->get('/dosen', 'dosen::index');
 // $routes->get('/gpm', 'gpm::index');
-
 // route admin selesai
 
 // route dosen
@@ -56,3 +55,15 @@ $routes->get('dosen/get_rps/(:num)', 'dosenController::get_rps/$1');
 $routes->put('dosen/update_rps/(:num)', 'dosenController::update_rps/$1');
 $routes->post('dosen/simpan_bap', 'dosenController::simpan_bap');
 $routes->get('dosen/get-bap-details/(:num)', 'Dosen::getBapDetails/$1');
+$routes->post('/dosen/update-bap', 'Dosen::updateBap');
+$routes->get('/dosen/download-bap/(:num)', 'Dosen::downloadBap/$1');
+$routes->delete('/dosen/delete-bap/(:num)', 'Dosen::deleteBap/$1');
+$routes->get('dosen/profile', 'dosenController::profile_dosen');
+$routes->get('dosen/notifikasi_rps', 'dosenController::notifikasi_rps');
+
+
+// route gpm
+$routes->get('/dashboard/dashboard_gpm', 'GpmController::dashboard_gpm', ['filter' => 'role:gpm']);
+$routes->get('/dashboard/gpm_rps', 'GpmController::gpm_rps', ['filter' => 'role:gpm']);
+$routes->get('gpm/download/(:num)', 'GpmController::download/$1', ['filter' => 'role:gpm']);
+$routes->post('gpm/save-review', 'GpmController::saveReview', ['filter' => 'role:gpm']);

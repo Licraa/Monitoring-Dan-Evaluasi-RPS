@@ -21,28 +21,32 @@
             <div class="sidebar-header">
                 <p>Tahun Ajaran : 2024/2025 Ganjil</p>
             </div>
-            <a href="dashboard-dosen.html" class="menu-item">
+            <a href="/dosen" class="menu-item active">
                 <i class="bi bi-speedometer2"></i><span>Halaman Utama</span>
             </a>
-            <a href="#" class="menu-item" id="menuRPS">
+
+            <a href="/dosen/menurps" class="menu-item" id="menuRPS">
                 <i class="bi bi-file-earmark-arrow-up-fill"></i><span>RPS</span>
                 <i class="bi bi-chevron-left chevron-icon float-end"></i>
             </a>
-            <a href="unggah-rps.html" class="menu-item submenu-item" id="unggahRpsMenu" style="display: none;"><span>Unggah RPS</span></a>
-            <a href="daftar-upload-rps.html" class="menu-item submenu-item" id="daftarUploadRpsMenu" style="display: none;"><span>Daftar Upload RPS</span></a>
+            <a href="/dosen/unggah-rps" class="menu-item submenu-item" id="unggahRpsMenu" style="display: none;"><span>Unggah RPS</span></a>
+            <a href="dosen/daftar_upload" class="menu-item submenu-item" id="daftarUploadRpsMenu" style="display: none;"><span>Daftar Upload RPS</span></a>
+
             <a href="#" class="menu-item" id="menuBAP">
                 <i class="bi bi-file-earmark-pdf-fill"></i><span>BAP</span>
                 <i class="bi bi-chevron-left chevron-icon float-end"></i>
             </a>
-            <a href="isi-bap.html" class="menu-item submenu-item" id="isiBapMenu" style="display: none;"><span>Isi BAP</span></a>
-            <a href="daftar-bap.html" class="menu-item submenu-item" id="daftarBapMenu" style="display: none;"><span>Daftar BAP</span></a>
-            <a href="feedback.html" class="menu-item">
-                <img src="feedback.png" alt="Feedback Icon" class="feedback-icon"><span>Feedback RPS</span>
+            <a href="/dosen/isi_bap" class="menu-item submenu-item" id="isiBapMenu" style="display: none;"><span>Isi BAP</span></a>
+            <a href="/dosen/daftar_bap" class="menu-item submenu-item" id="daftarBapMenu" style="display: none;"><span>Daftar BAP</span></a>
+
+
+            <a href="/dosen/feedback" class="menu-item">
+                <img src="/img/feedback.png" alt="Feedback Icon" class="feedback-icon"><span>Feedback RPS</span>
             </a>
-            <a href="notifikasi-rps.html" class="menu-item">
+            <a href="dosen/notifikasi-rps" class="menu-item">
                 <i class="bi bi-bell-fill"></i><span>Notifikasi</span>
             </a>
-            <a href="#" class="menu-item">
+            <a href="/logout" class="menu-item">
                 <i class="bi bi-box-arrow-left"></i><span>Keluar</span>
             </a>
         </nav>
@@ -54,7 +58,7 @@
             <!-- Right-aligned container for profile and notification icons -->
             <div class="right-icons">
                 <a href="profile.html" class="profile-link">
-                    <span class="admin-name">Nama Dosen</span>
+                    <span class="admin-name"><?= user()->username ?></span>
                     <i class="bi bi-person-fill"></i>
                 </a>
                 <a href="notifikasi-rps.html" class="notif">
@@ -80,13 +84,6 @@
                             <?= session()->getFlashdata('message') ?>
                         </div>
                     <?php endif; ?>
-
-                    <!-- Debug: Print data -->
-                    <?php
-                    // echo "<pre>";
-                    // print_r($bap_list ?? 'No data');
-                    // echo "</pre>";
-                    ?>
 
                     <table id="daftarBapTable" class="table table-bordered">
                         <thead>
@@ -117,7 +114,12 @@
                                                 data-tempat="<?= $bap['tempat'] ?>">
                                                 <i class="bi bi-eye"></i>
                                             </button>
-                                            <button class="btn btn-sm btn-warning edit-btn" data-id="<?= $bap['bap_id'] ?>">
+                                            <button class="btn btn-sm btn-warning edit-btn"
+                                                data-id="<?= $bap['bap_id'] ?>"
+                                                data-tanggal="<?= $bap['tanggal'] ?>"
+                                                data-mk="<?= $bap['nama_mk'] ?>"
+                                                data-kode="<?= $bap['kode_mk'] ?>"
+                                                data-tempat="<?= $bap['tempat'] ?>">
                                                 <i class="bi bi-pencil"></i>
                                             </button>
                                             <button class="btn btn-sm btn-primary download-btn" data-id="<?= $bap['bap_id'] ?>">
@@ -256,7 +258,7 @@
                                     <h5 style="text-align: center; font-weight: bold;">REVIEW RENCANA PEMBELAJARAN SEMESTER (RPS)</h5>
                                     <p>Hari/tanggal: ${hari} / ${formattedDate}</p>
                                     <p>Tempat: ${bapData.bap.tempat}</p>
-                                    <p>Nama MK / Kode MK: ${bapData.bap.nama_mk} / ${bapData.bap.kode_mk}</p>
+                                    <p>Nama MK / Kode MK: ${bapData.nama_mk} / ${bapData.bap.kode_mk}</p>
                                     <h6>Catatan review:</h6>
                                     <table style="width: 100%; border-collapse: collapse;">
                                         <thead>
@@ -288,6 +290,163 @@
                         alert('Terjadi kesalahan saat mengambil data BAP');
                     }
                 });
+            });
+
+            // Edit button handler
+            const editButtons = document.querySelectorAll('.edit-btn');
+            editButtons.forEach(button => {
+                button.addEventListener('click', async function() {
+                    const bapId = this.getAttribute('data-id');
+                    try {
+                        const response = await fetch(`/dosen/get-bap-details/${bapId}`);
+                        const data = await response.json();
+
+                        if (data.success) {
+                            // Store bap_id in a hidden input
+                            const form = document.getElementById('editBapForm');
+                            if (!form.querySelector('input[name="bap_id"]')) {
+                                const hiddenInput = document.createElement('input');
+                                hiddenInput.type = 'hidden';
+                                hiddenInput.name = 'bap_id';
+                                hiddenInput.value = bapId;
+                                form.appendChild(hiddenInput);
+                            } else {
+                                form.querySelector('input[name="bap_id"]').value = bapId;
+                            }
+
+                            // Populate form fields
+                            document.getElementById('editTanggal').value = data.bap.tanggal;
+                            document.getElementById('editMataKuliah').value = data.nama_mk;
+                            document.getElementById('editKodeMK').value = data.bap.kode_mk;
+                            document.getElementById('editTempat').value = data.bap.tempat;
+
+                            // Populate review notes
+                            const tbody = document.getElementById('catatanReviewBody');
+                            tbody.innerHTML = data.review_notes.map((note, index) => `
+                                <tr>
+                                    <td>${index + 1}</td>
+                                    <td><input type="text" class="form-control" value="${note.catatan}" name="catatan[]"></td>
+                                    <td><button type="button" class="btn btn-danger btn-sm delete-note">Hapus</button></td>
+                                </tr>
+                            `).join('');
+
+                            // Show edit modal
+                            const editModal = new bootstrap.Modal(document.getElementById('editBapModal'));
+                            editModal.show();
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('Terjadi kesalahan saat mengambil data');
+                    }
+                });
+            });
+
+            // Download button handler
+            const downloadButtons = document.querySelectorAll('.download-btn');
+            downloadButtons.forEach(button => {
+                button.addEventListener('click', async function() {
+                    const bapId = this.getAttribute('data-id');
+                    try {
+                        const response = await fetch(`/dosen/download-bap/${bapId}`);
+                        if (response.ok) {
+                            const blob = await response.blob();
+                            const url = window.URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = `BAP_${bapId}.pdf`;
+                            document.body.appendChild(a);
+                            a.click();
+                            window.URL.revokeObjectURL(url);
+                        } else {
+                            alert('Gagal mengunduh BAP');
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                        alert('Terjadi kesalahan saat mengunduh BAP');
+                    }
+                });
+            });
+
+            // Delete button handler
+            const deleteButtons = document.querySelectorAll('.delete-btn');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', async function() {
+                    if (confirm('Apakah Anda yakin ingin menghapus BAP ini?')) {
+                        const bapId = this.getAttribute('data-id');
+                        try {
+                            const response = await fetch(`/dosen/delete-bap/${bapId}`, {
+                                method: 'DELETE'
+                            });
+                            const data = await response.json();
+
+                            if (data.success) {
+                                alert('BAP berhasil dihapus');
+                                location.reload();
+                            } else {
+                                alert(data.message || 'Gagal menghapus BAP');
+                            }
+                        } catch (error) {
+                            console.error('Error:', error);
+                            alert('Terjadi kesalahan saat menghapus BAP');
+                        }
+                    }
+                });
+            });
+
+            // Add new review note button
+            document.getElementById('addReviewBtn').addEventListener('click', function() {
+                const tbody = document.getElementById('catatanReviewBody');
+                const newRow = document.createElement('tr');
+                const rowCount = tbody.children.length;
+
+                newRow.innerHTML = `
+                    <td>${rowCount + 1}</td>
+                    <td><input type="text" class="form-control" name="catatan[]"></td>
+                    <td><button type="button" class="btn btn-danger btn-sm delete-note">Hapus</button></td>
+                `;
+                tbody.appendChild(newRow);
+            });
+
+            // Handle delete note button
+            document.getElementById('catatanReviewBody').addEventListener('click', function(e) {
+                if (e.target.classList.contains('delete-note')) {
+                    e.target.closest('tr').remove();
+                }
+            });
+
+            // Handle edit form submission
+            document.getElementById('editBapForm').addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const formData = {
+                    bap_id: this.querySelector('input[name="bap_id"]').value,
+                    tanggal: document.getElementById('editTanggal').value,
+                    nama_mk: document.getElementById('editMataKuliah').value,
+                    kode_mk: document.getElementById('editKodeMK').value,
+                    tempat: document.getElementById('editTempat').value,
+                    catatan: Array.from(document.getElementsByName('catatan[]')).map(input => input.value)
+                };
+
+                try {
+                    const response = await fetch('/dosen/update-bap', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(formData)
+                    });
+
+                    const data = await response.json();
+                    if (data.success) {
+                        alert('BAP berhasil diperbarui');
+                        location.reload();
+                    } else {
+                        alert(data.message || 'Gagal memperbarui BAP');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat memperbarui BAP');
+                }
             });
 
             // Helper functions

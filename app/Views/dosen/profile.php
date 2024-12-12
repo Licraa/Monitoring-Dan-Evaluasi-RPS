@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,42 +10,51 @@
     <link rel="stylesheet" href="dosen.css">
     <link rel="stylesheet" href="profil.css">
 </head>
+
 <body>
     <div class="dashboard-container">
         <!-- Sidebar -->
         <nav class="sidebar">
             <div class="sidebar-header-judul">
-                <p>MONEV RPS</p> 
+                <p>MONEV RPS</p>
             </div>
             <div class="sidebar-header">
                 <p>Tahun Ajaran : 2024/2025 Ganjil</p>
             </div>
-            <a href="dashboard-dosen.html" class="menu-item">
+            <a href="/dosen" class="menu-item active">
                 <i class="bi bi-speedometer2"></i><span>Halaman Utama</span>
             </a>
-            <a href="#" class="menu-item" id="menuRPS">
+
+            <a href="/dosen/menurps" class="menu-item" id="menuRPS">
                 <i class="bi bi-file-earmark-arrow-up-fill"></i><span>RPS</span>
                 <i class="bi bi-chevron-left chevron-icon float-end"></i>
             </a>
-            <a href="unggah-rps.html" class="menu-item submenu-item" id="unggahRpsMenu" style="display: none;"><span>Unggah RPS</span></a>
-            <a href="Isi-bap.html" class="menu-item">
-                <i class="bi bi-file-earmark-pdf-fill"></i><span>BAP</span> 
+            <a href="/dosen/unggah-rps" class="menu-item submenu-item" id="unggahRpsMenu" style="display: none;"><span>Unggah RPS</span></a>
+            <a href="dosen/daftar_upload" class="menu-item submenu-item" id="daftarUploadRpsMenu" style="display: none;"><span>Daftar Upload RPS</span></a>
+
+            <a href="#" class="menu-item" id="menuBAP">
+                <i class="bi bi-file-earmark-pdf-fill"></i><span>BAP</span>
+                <i class="bi bi-chevron-left chevron-icon float-end"></i>
             </a>
-            <a href="feedback.html" class="menu-item">
-                <img src="feedback.png" alt="Feedback Icon" class="feedback-icon"><span>Feedback RPS</span> 
+            <a href="/dosen/isi_bap" class="menu-item submenu-item" id="isiBapMenu" style="display: none;"><span>Isi BAP</span></a>
+            <a href="/dosen/daftar_bap" class="menu-item submenu-item" id="daftarBapMenu" style="display: none;"><span>Daftar BAP</span></a>
+
+
+            <a href="/dosen/feedback" class="menu-item">
+                <img src="/img/feedback.png" alt="Feedback Icon" class="feedback-icon"><span>Feedback RPS</span>
             </a>
-            <a href="notifikasi-rps.html" class="menu-item">
-                <i class="bi bi-bell-fill"></i><span>Notifikasi</span> 
+            <a href="dosen/notifikasi-rps" class="menu-item">
+                <i class="bi bi-bell-fill"></i><span>Notifikasi</span>
             </a>
-            <a href="#" class="menu-item">
-                <i class="bi bi-box-arrow-left"></i><span>Keluar</span> 
+            <a href="/logout" class="menu-item">
+                <i class="bi bi-box-arrow-left"></i><span>Keluar</span>
             </a>
         </nav>
 
         <!-- Main content -->
         <div class="admin-info">
             <span class="toggle-sidebar">&#9776;</span>
-            
+
             <!-- Right-aligned container for profile and notification icons -->
             <div class="right-icons">
                 <a href="profile.html" class="profile-link">
@@ -108,10 +118,11 @@
     <footer class="footer">
         <p>&copy; 2024 Fakultas Teknik. All rights reserved.</p>
     </footer>
-    
+
     <script src="dosen.js"></script>
 
     <!-- Scripts for Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

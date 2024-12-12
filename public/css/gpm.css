@@ -82,10 +82,15 @@ body {
   transition: background-color 0.3s ease;
 }
 
+.menu-item span {
+  padding-left: 10px;
+}
+
 .menu-item:hover,
 .menu-item.active {
   background-color: #f0ad4e;
   color: white;
+  text-decoration: none;
 }
 
 .dropdown {
@@ -127,12 +132,13 @@ body {
 .submenu-item.active-submenu {
   background-color: #f0ad4e;
   color: white;
+  text-decoration: none;
 }
 
 .submenu {
   display: none;
   padding-left: 20px;
-  background-color: #f6f6f6;
+  background-color: #ececec;
   /* overflow: hidden; */
 }
 
@@ -187,9 +193,36 @@ body {
   color: rgb(255, 255, 255);
 }
 
+.toggle-sidebar {
+  cursor: pointer;
+  color: #fff;
+  font-size: 20px;
+}
+
+.right-icons {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-left: auto;
+}
+
 .bi-person-fill {
   color: white;
   font-size: 30px;
+}
+
+.profile-link {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.notif {
+  color: #fff;
+  font-size: 1.2em;
+  text-decoration: none;
 }
 
 .card {
@@ -200,12 +233,9 @@ body {
 }
 
 .card-body {
-  background-color: rgb(
-    255,
-    255,
-    255
-  ); /* Mengatur warna latar belakang isi kotak menjadi putih */
+  background-color: #4a9fff; /* Mengatur warna latar belakang isi kotak menjadi putih */
   padding: 20px; /* Tambahkan padding untuk memberi jarak pada konten */
+  color: white;
 }
 
 .card-header {
@@ -220,6 +250,12 @@ body {
 
 button.btn-primary.mt-2 {
   width: 100%;
+}
+
+#rekapLaporan {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
 }
 
 .feedback-icon {
@@ -354,4 +390,110 @@ input[type="radio"] + label:hover {
 
 #rps .table-striped .action-button:hover {
   background-color: #2b78d4;
+}
+
+.notification-icon {
+  position: relative;
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.notification-icon i {
+  font-size: 1.5rem;
+  color: white;
+}
+
+.notification-icon .notification-count {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+.comments-section {
+  margin-top: 2rem;
+  padding: 1rem;
+  border-top: 1px solid #ddd;
+}
+
+#comment-form textarea {
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+#comment-form button {
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#comment-form button:hover {
+  background-color: #0056b3;
+}
+
+#comments-list {
+  margin-top: 1rem;
+}
+
+/* Styling untuk container tombol aksi */
+.table td {
+  vertical-align: middle;
+}
+
+/* Styling untuk tombol-tombol dalam kolom aksi */
+.table .btn {
+  margin-right: 8px; /* Jarak antar tombol */
+  min-width: 80px; /* Lebar minimum tombol */
+}
+
+/* Warna dan styling khusus untuk setiap tombol */
+.btn-info {
+  /* Tombol Lihat */
+  background-color: #17a2b8;
+  border-color: #17a2b8;
+  color: white;
+}
+
+.btn-primary {
+  /* Tombol Download */
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-warning {
+  /* Tombol Review */
+  background-color: #ffc107;
+  border-color: #ffc107;
+}
+
+/* Hover effect */
+.btn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
+
+/* Memastikan tombol terakhir tidak memiliki margin kanan */
+.table .btn:last-child {
+  margin-right: 0;
+}
+
+.btn {
+  margin-right: 8px;
+  margin-bottom: 5px;
+  display: inline-block;
+}
+
+.btn:last-child {
+  margin-right: 0;
 }

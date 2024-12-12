@@ -8,7 +8,7 @@ class DaftarRpsModel extends Model
 {
   protected $table = 'daftar_rps';
   protected $primaryKey = 'id';
-  protected $allowedFields = ['user_id', 'kode_mk', 'jurusan_id', 'kelas', 'link_rps'];
+  protected $allowedFields = ['user_id', 'kode_mk', 'jurusan_id', 'kelas', 'link_rps', 'created_at', 'updated_at'];
   protected $useTimestamps = true;
   protected $returnType = 'object';
 
