@@ -14,6 +14,7 @@ use App\Models\MataKuliahModel;
 use App\Models\UnsurModel;
 use App\Models\ReviewRpsModel;
 use Myth\Auth\Models\GroupModel;
+use CodeIgniter\Database\ConnectionInterface;
 
 
 class GpmController extends BaseController
@@ -30,6 +31,7 @@ class GpmController extends BaseController
   protected $unsurModel;
   protected $reviewModel;
   protected $groupModel;
+  protected $db;
   public function __construct()
   {
     $this->rpsModel = new RpsModel();
@@ -44,6 +46,7 @@ class GpmController extends BaseController
     $this->unsurModel = new UnsurModel();
     $this->reviewModel = new ReviewRpsModel();
     $this->groupModel = new GroupModel();
+    $this->db = \Config\Database::connect();
   }
 
   public function dashboard_kajur()
@@ -192,6 +195,65 @@ class GpmController extends BaseController
       return 'Selesai';
     } else {
       return 'Dalam Proses';
+    }
+  }
+
+  public function bap()
+  {
+    $data['mata_kuliah'] = $this->mataKuliahModel->findAll();
+
+    // Tambahkan query untuk mendapatkan data lengkap
+    $query = $this->db->table('bap')
+      ->select('bap.*, mata_kuliah.nama_mk')
+      ->join('mata_kuliah', 'mata_kuliah.kode_mk = bap.kode_mk')
+      ->get();
+
+    $data['bap_list'] = $query->getResultArray();
+
+    // Ambil catatan review untuk setiap BAP
+    if (!empty($data['bap_list'])) {
+      foreach ($data['bap_list'] as &$bap) {
+        $bap['catatan'] = $this->bapCatatanModel
+          ->where('bap_id', $bap['id'])
+          ->findAll();
+      }
+    }
+    return view('gpm/bap', $data);
+  }
+
+  public function getBapDetails($bapId)
+  {
+    try {
+      $bapModel = new BapModel();
+      $reviewNotesModel = new BapCatatanModel();
+      $mataKuliahModel = new MataKuliahModel();
+
+
+      $bap = $bapModel->find($bapId);
+
+      if (!$bap) {
+        return $this->response->setJSON([
+          'success' => false,
+          'message' => 'BAP tidak ditemukan'
+        ]);
+      }
+
+      $mataKuliah = $mataKuliahModel->where('kode_mk', $bap['kode_mk'])->first();
+
+      $reviewNotes = $reviewNotesModel->where('bap_id', $bapId)->findAll();
+
+      return $this->response->setJSON([
+        'success' => true,
+        'bap' => $bap,
+        'nama_mk' => $mataKuliah['nama_mk'],
+        'review_notes' => $reviewNotes
+      ]);
+    } catch (\Exception $e) {
+      log_message('error', 'Error in getBapDetails: ' . $e->getMessage());
+      return $this->response->setJSON([
+        'success' => false,
+        'message' => 'Terjadi kesalahan server'
+      ]);
     }
   }
 }

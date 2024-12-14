@@ -128,8 +128,7 @@ class AdminController extends BaseController
             'keterangan' => $this->request->getPost('keterangan')
         ];
         if ($this->validate([
-            'unsur' => 'required',
-            'keterangan' => 'required'
+            'unsur' => 'required'
         ])) {
             $this->unsur->save($data);
             return redirect()->to('/rps')->with('message', 'Data berhasil disimpan');

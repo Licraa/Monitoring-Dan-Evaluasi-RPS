@@ -132,6 +132,7 @@
                             data-bs-toggle="tooltip"
                             title="Edit"
                             style="cursor: pointer;"></i>
+
                           <i class="bi bi-trash3-fill delete-icon"
                             data-id="<?= $rps->id ?>"
                             style="cursor: pointer; margin-left: 10px;"
@@ -164,45 +165,27 @@
           <div class="modal-body">
             <form id="editForm">
               <div class="mb-3">
-                <label for="editMataKuliah" class="form-label">Mata Kuliah</label>
-                <input type="text" class="form-control" id="editMataKuliah" required>
-              </div>
-              <div class="mb-3">
-                <label for="editKode" class="form-label">Kode Mata Kuliah</label>
-                <input type="text" class="form-control" id="editKode" required>
-              </div>
-              <div class="mb-3">
-                <label for="editProdi" class="form-label">Prodi</label>
+                <label for="editProdi" class="form-label">Program Studi</label>
                 <select class="form-control" id="editProdi" required>
-                  <option value="Teknik Informatika">Teknik Informatika</option>
-                  <option value="Teknik Elektro">Teknik Elektro</option>
-                  <option value="Teknik Perkapalan">Teknik Perkapalan</option>
-                  <option value="Kimia">Kimia</option>
-                  <option value="Teknik Industri">Teknik Industri</option>
+                  <option value="">Pilih Program Studi</option>
+                  <?php foreach ($prodi as $p): ?>
+                    <option value="<?= $p->id ?>"><?= $p->nama_jurusan ?></option>
+                  <?php endforeach; ?>
                 </select>
               </div>
               <div class="mb-3">
-                <label for="editTahunAjaran" class="form-label">Tahun Ajaran</label>
-                <select class="form-control" id="editTahunAjaran" required>
-                  <option value="2020/2021">2020/2021</option>
-                  <option value="2021/2022">2021/2022</option>
-                  <option value="2022/2023">2022/2023</option>
-                  <option value="2023/2024">2023/2024</option>
-                  <option value="2024/2025">2024/2025</option>
-                  <option value="2025/2026">2025/2026</option>
-                  <option value="2026/2027">2026/2027</option>
-                </select>
-              </div>
-              <div class="mb-3">
-                <label for="editSemester" class="form-label">Semester</label>
-                <select class="form-control" id="editSemester" required>
-                  <option value="Ganjil">Ganjil</option>
-                  <option value="Genap">Genap</option>
+                <label for="editMataKuliah" class="form-label">Mata Kuliah</label>
+                <select class="form-control" id="editMataKuliah" required>
+                  <option value="">Pilih Mata Kuliah</option>
                 </select>
               </div>
               <div class="mb-3">
                 <label for="editKelas" class="form-label">Kelas</label>
                 <input type="text" class="form-control" id="editKelas" required>
+              </div>
+              <div class="mb-3">
+                <label for="editLinkRps" class="form-label">Link RPS</label>
+                <input type="url" class="form-control" id="editLinkRps" required>
               </div>
             </form>
           </div>
@@ -270,6 +253,133 @@
   <script src="/js/dosen.js"></script>
   <!-- Scripts for Bootstrap -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Handle prodi change to update mata kuliah dropdown
+      document.getElementById('editProdi').addEventListener('change', function() {
+        const prodiId = this.value;
+        const mataKuliahSelect = document.getElementById('editMataKuliah');
+
+        // Clear current options
+        mataKuliahSelect.innerHTML = '<option value="">Pilih Mata Kuliah</option>';
+
+        if (prodiId) {
+          fetch(`/dosen/getMataKuliahByJurusan/${prodiId}`)
+            .then(response => response.json())
+            .then(data => {
+              data.forEach(mk => {
+                const option = document.createElement('option');
+                option.value = mk.kode_mk;
+                option.textContent = mk.nama_mk;
+                mataKuliahSelect.appendChild(option);
+              });
+            })
+            .catch(error => console.error('Error:', error));
+        }
+      });
+
+      // Handle Edit
+      document.querySelectorAll('.edit-icon').forEach(icon => {
+        icon.addEventListener('click', function() {
+          const rpsId = this.dataset.id;
+
+          // Fetch RPS data
+          fetch(`/dosen/get_rps/${rpsId}`)
+            .then(response => response.json())
+            .then(data => {
+              if (data.error) {
+                alert(data.error);
+                return;
+              }
+
+              // Set prodi value first
+              document.getElementById('editProdi').value = data.jurusan_id;
+
+              // Trigger prodi change event to load mata kuliah options
+              const event = new Event('change');
+              document.getElementById('editProdi').dispatchEvent(event);
+
+              // Set other values after a short delay to ensure mata kuliah options are loaded
+              setTimeout(() => {
+                document.getElementById('editMataKuliah').value = data.kode_mk;
+                document.getElementById('editKelas').value = data.kelas;
+                document.getElementById('editLinkRps').value = data.link_rps;
+
+                // Store RPS ID for update
+                document.getElementById('editForm').dataset.rpsId = rpsId;
+
+                // Show modal
+                new bootstrap.Modal(document.getElementById('editModal')).show();
+              }, 500);
+            })
+            .catch(error => console.error('Error:', error));
+        });
+      });
+
+      // Handle Save Edit
+      document.getElementById('saveEditBtn').addEventListener('click', function() {
+        const rpsId = document.getElementById('editForm').dataset.rpsId;
+        const formData = {
+          kode_mk: document.getElementById('editMataKuliah').value,
+          jurusan_id: document.getElementById('editProdi').value,
+          kelas: document.getElementById('editKelas').value,
+          link_rps: document.getElementById('editLinkRps').value
+        };
+
+        // Tambahkan log untuk debugging
+        console.log('Sending data:', formData);
+
+        fetch(`/dosen/update_rps/${rpsId}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: JSON.stringify(formData)
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              alert(data.message || 'RPS berhasil diperbarui');
+              window.location.reload();
+            } else {
+              alert(data.message || 'Gagal mengupdate RPS');
+              console.error('Error details:', data);
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert('Terjadi kesalahan saat menyimpan RPS');
+          });
+      });
+
+      // Handle Delete
+      document.querySelectorAll('.delete-icon').forEach(icon => {
+        icon.addEventListener('click', function() {
+          if (confirm('Apakah Anda yakin ingin menghapus RPS ini?')) {
+            const rpsId = this.dataset.id;
+
+            fetch(`/dosen/hapus_rps/${rpsId}`, {
+                method: 'DELETE',
+                headers: {
+                  'X-Requested-With': 'XMLHttpRequest'
+                }
+              })
+              .then(response => response.json())
+              .then(data => {
+                if (data.success) {
+                  window.location.reload();
+                } else {
+                  alert('Gagal menghapus RPS');
+                }
+              })
+              .catch(error => console.error('Error:', error));
+          }
+        });
+      });
+    });
+  </script>
 </body>
 
 </html>

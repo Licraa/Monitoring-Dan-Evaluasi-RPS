@@ -20,17 +20,21 @@
       <div class="sidebar-header">
         <p>Tahun Ajaran : 2024/2025 Ganjil</p>
       </div>
-      <a href="#" class="menu-item active">
+      <a href="<?= base_url('/dashboard/gpm_rps') ?>" class="menu-item active">
         <i class="bi bi-speedometer2"></i><span>Halaman Utama</span>
       </a>
-      <a href="<?= base_url('dashboard/gpm_rps') ?>" class="menu-item">
+      <a href="<?= base_url('/dashboard/gpm_rps') ?>" class="menu-item">
         <i class="bi bi-file-earmark"></i><span>RPS</span>
       </a>
-      <a href="#" class="menu-item">
+      <a href="<?= base_url('/gpm/notifikasi') ?>" class="menu-item">
         <i class="bi bi-bell-fill"></i><span>Notifikasi</span>
       </a>
-      <a href="#" class="menu-item">
-        <i class="bi bi-box-arrow-left"></i><span>Keluar</span>
+      <a href="<?= base_url('/gpm/bap') ?>" class="menu-item">
+        <i class="bi bi-file-earmark"></i><span>BAP</span>
+      </a>
+
+      <a href="<?= base_url('/logout') ?>" class="menu-item">
+        <i class="bi bi-box-arrow-left"></i><span>Logout</span>
       </a>
     </nav>
 

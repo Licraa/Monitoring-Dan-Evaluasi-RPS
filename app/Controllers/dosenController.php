@@ -273,13 +273,27 @@ class dosenController extends BaseController
 
   public function update_rps($id)
   {
-    if (!$this->validate([
+    // Ambil raw input JSON
+    $jsonInput = $this->request->getJSON(true);
+
+    if (empty($jsonInput)) {
+      return $this->response->setJSON(['success' => false, 'message' => 'Data tidak valid']);
+    }
+
+    // Validasi input
+    $rules = [
       'kode_mk' => 'required',
       'jurusan_id' => 'required',
       'kelas' => 'required',
       'link_rps' => 'required|valid_url'
-    ])) {
-      return $this->response->setJSON(['success' => false, 'errors' => $this->validator->getErrors()]);
+    ];
+
+    if (!$this->validateData($jsonInput, $rules)) {
+      return $this->response->setJSON([
+        'success' => false,
+        'message' => 'Validasi gagal',
+        'errors' => $this->validator->getErrors()
+      ]);
     }
 
     $userId = user_id();
@@ -288,21 +302,41 @@ class dosenController extends BaseController
       ->first();
 
     if (!$existingRps) {
-      return $this->response->setJSON(['success' => false, 'message' => 'Data tidak ditemukan']);
+      return $this->response->setJSON([
+        'success' => false,
+        'message' => 'Data RPS tidak ditemukan'
+      ]);
     }
 
-    $data = [
-      'kode_mk' => $this->request->getPost('kode_mk'),
-      'jurusan_id' => $this->request->getPost('jurusan_id'),
-      'kelas' => $this->request->getPost('kelas'),
-      'link_rps' => $this->request->getPost('link_rps')
-    ];
+    try {
+      $data = [
+        'kode_mk' => $jsonInput['kode_mk'],
+        'jurusan_id' => $jsonInput['jurusan_id'],
+        'kelas' => $jsonInput['kelas'],
+        'link_rps' => $jsonInput['link_rps'],
+        'updated_at' => date('Y-m-d H:i:s')
+      ];
 
-    if ($this->daftarRps->update($id, $data)) {
-      return $this->response->setJSON(['success' => true]);
+      $updated = $this->daftarRps->update($id, $data);
+
+      if ($updated) {
+        return $this->response->setJSON([
+          'success' => true,
+          'message' => 'RPS berhasil diperbarui'
+        ]);
+      } else {
+        return $this->response->setJSON([
+          'success' => false,
+          'message' => 'Gagal memperbarui RPS'
+        ]);
+      }
+    } catch (\Exception $e) {
+      log_message('error', 'Error updating RPS: ' . $e->getMessage());
+      return $this->response->setJSON([
+        'success' => false,
+        'message' => 'Terjadi kesalahan saat memperbarui RPS'
+      ]);
     }
-
-    return $this->response->setJSON(['success' => false]);
   }
 
   public function simpan_bap()
