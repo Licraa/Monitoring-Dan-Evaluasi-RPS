@@ -26,7 +26,7 @@
       <a href="<?= base_url('/dashboard/gpm_rps') ?>" class="menu-item">
         <i class="bi bi-file-earmark"></i><span>RPS</span>
       </a>
-      <a href="<?= base_url('/gpm/bap') ?>" class="menu-item">
+      <a href="<?= base_url('/gpm/bap') ?>" class="menu-item ">
         <i class="bi bi-file-earmark"></i><span>BAP</span>
       </a>
       <a href="<?= base_url('/gpm/notifikasi') ?>" class="menu-item">
@@ -72,11 +72,23 @@
                 </div>
               </div>
             </div>
+
             <div class="col-md-3">
               <div class="custom-card">
                 <i class="bi bi-bell-fill card-icon"></i>
                 <div class="card-header">
-                  <a href="#" class="card-name">
+                  <a href="<?= base_url('/gpm/bap') ?>" class="card-name">
+                    <span>BAP</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-3">
+              <div class="custom-card">
+                <i class="bi bi-bell-fill card-icon"></i>
+                <div class="card-header">
+                  <a href="<?= base_url('/gpm/notifikasi') ?>" class="card-name">
                     <span>Notifikasi</span>
                   </a>
                 </div>
@@ -91,7 +103,7 @@
   <footer class="footer">
     <p>&copy; 2024 Fakultas Teknik. All rights reserved.</p>
   </footer>
-  <script src="<?= base_url('js/gpm.js') ?>"></script>
+  <script src="<?= base_url('/js/gpm.js') ?>"></script>
 </body>
 
 </html>

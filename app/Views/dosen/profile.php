@@ -57,11 +57,11 @@
 
             <!-- Right-aligned container for profile and notification icons -->
             <div class="right-icons">
-                <a href="profile.html" class="profile-link">
-                    <span class="admin-name">Nama Dosen</span>
+                <a href="<?= base_url('/dosen/profile') ?>" class="profile-link">
+                    <span class="admin-name"><?= user()->username ?></span>
                     <i class="bi bi-person-fill"></i>
                 </a>
-                <a href="notifikasi-rps.html" class="notif">
+                <a href="<?= base_url('/dosen/notifikasi') ?>" class="notif">
                     <i class="bi bi-bell-fill"></i>
                 </a>
             </div>
@@ -77,23 +77,23 @@
                     <div class="profile-form">
                         <div class="form-group">
                             <label for="nama">Nama</label>
-                            <input type="text" id="nama" name="nama">
+                            <input type="text" id="nama" name="nama" value="<?= user()->username ?>">
                         </div>
                         <div class="form-group">
                             <label for="nidn">NIDN</label>
-                            <input type="text" id="nidn" name="nidn">
+                            <input type="text" id="nidn" name="nidn" value="<?= user()->nidn ?>">
                         </div>
                         <div class="form-group">
                             <label for="email">Email</label>
-                            <input type="email" id="email" name="email">
+                            <input type="email" id="email" name="email" value="<?= user()->email ?>">
                         </div>
                         <div class="form-group">
                             <label for="fakultas">Fakultas</label>
-                            <input type="text" id="fakultas" name="fakultas">
+                            <input type="text" id="fakultas" name="fakultas" value="<?= user()->fakultas ?>">
                         </div>
                         <div class="form-group">
                             <label for="jurusan">Jurusan</label>
-                            <input type="text" id="jurusan" name="jurusan">
+                            <input type="text" id="jurusan" name="jurusan" value="<?= user()->jurusan ?>">
                         </div>
                         <div class="form-group">
                             <label for="role">Role</label>

@@ -73,6 +73,18 @@
                 </div>
               </div>
             </div>
+
+            <div class="col-md-3">
+              <div class="custom-card">
+                <i class="bi bi-bell-fill card-icon"></i>
+                <div class="card-header">
+                  <a href="<?= base_url('/gpm/bap') ?>" class="card-name">
+                    <span>BAP</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
             <div class="col-md-3">
               <div class="custom-card">
                 <i class="bi bi-bell-fill card-icon"></i>
