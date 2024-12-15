@@ -75,7 +75,7 @@
 
             <div class="col-md-3">
               <div class="custom-card">
-                <i class="bi bi-bell-fill card-icon"></i>
+                <i class="bi bi-file-earmark-pdf-fill card-icon"></i>
                 <div class="card-header">
                   <a href="<?= base_url('/gpm/bap') ?>" class="card-name">
                     <span>BAP</span>
