@@ -31,14 +31,10 @@
             <a href="<?= base_url('/gpm/bap') ?>" class="menu-item ">
                 <i class="bi bi-file-earmark"></i><span>BAP</span>
             </a>
-<<<<<<< HEAD
             <a href="<?= base_url('/gpm/notifikasi') ?>" class="menu-item">
                 <i class="bi bi-bell-fill"></i><span>Notifikasi</span>
             </a>
             <a href="<?= base_url('/gpm/logout') ?>" class="menu-item">
-=======
-            <a href="/logout" class="menu-item">
->>>>>>> cb509e869fdc6a620dca8bdf076700d9ae21aae5
                 <i class="bi bi-box-arrow-left"></i><span>Keluar</span>
             </a>
         </nav>
@@ -48,11 +44,11 @@
 
             <!-- Right-aligned container for profile and notification icons -->
             <div class="right-icons">
-                <a href="profile.html" class="profile-link">
+                <a href="<?= base_url('/gpm/profile') ?>" class="profile-link">
                     <span class="admin-name"><?= user()->username ?></span>
                     <i class="bi bi-person-fill"></i>
                 </a>
-                <a href="notifikasi.html" class="notif">
+                <a href="<?= base_url('/gpm/notifikasi') ?>" class="notif">
                     <i class="bi bi-bell-fill"></i>
                 </a>
             </div>
@@ -96,9 +92,6 @@
                                             <button class="btn btn-sm btn-warning review-modal-btn" data-toggle="modal" data-target="#reviewModal" data-rps-id="<?= $value->id ?>">
                                                 <i class="bi bi-pencil-square"></i> Review
                                             </button>
-                                            <a href="<?= site_url('gpm/download/' . $value->id); ?>" class="btn btn-sm btn-primary">
-                                                <i class="bi bi-download"></i>
-                                            </a>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
@@ -281,6 +274,8 @@
             font-size: 0.875rem;
         }
     </style>
+
+    <script src="<?= base_url('/js/gpm.js') ?>"></script>
 </body>
 
 </html>
