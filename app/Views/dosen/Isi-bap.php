@@ -57,11 +57,11 @@
 
             <!-- Right-aligned container for profile and notification icons -->
             <div class="right-icons">
-                <a href="profile.html" class="profile-link">
+                <a href="<?= base_url('/dosen/profile') ?>" class="profile-link">
                     <span class="admin-name"><?= user()->username ?></span>
                     <i class="bi bi-person-fill"></i>
                 </a>
-                <a href="notifikasi-rps.html" class="notif">
+                <a href="<?= base_url('/dosen/notifikasi') ?>" class="notif">
                     <i class="bi bi-bell-fill"></i>
                 </a>
             </div>
