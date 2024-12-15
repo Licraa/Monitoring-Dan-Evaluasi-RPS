@@ -103,6 +103,10 @@ class dosenController extends BaseController
     // Get current user ID
     $userId = user_id();
 
+    // Get search parameters
+    $searchMataKuliah = $this->request->getGet('mata_kuliah');
+    $searchProdi = $this->request->getGet('prodi');
+
     // Get data for dropdowns
     $data['prodi'] = $this->jurusan->findAll();
     $data['mata_kuliah'] = $this->db->table('mata_kuliah')
@@ -110,13 +114,27 @@ class dosenController extends BaseController
       ->join('jurusan', 'jurusan.id = mata_kuliah.id_jurusan')
       ->get()->getResult();
 
-    // Get RPS list for current user only
-    $data['rps_list'] = $this->db->table('daftar_rps')
+    // Build base query for RPS list
+    $query = $this->db->table('daftar_rps')
       ->select('daftar_rps.*, mata_kuliah.nama_mk, jurusan.nama_jurusan')
       ->join('mata_kuliah', 'mata_kuliah.kode_mk = daftar_rps.kode_mk')
       ->join('jurusan', 'jurusan.id = daftar_rps.jurusan_id')
-      ->where('daftar_rps.user_id', $userId)
-      ->get()->getResult();
+      ->where('daftar_rps.user_id', $userId);
+
+    // Apply search filters if they exist
+    if ($searchMataKuliah) {
+      $query->where('daftar_rps.kode_mk', $searchMataKuliah);
+    }
+    if ($searchProdi) {
+      $query->where('daftar_rps.jurusan_id', $searchProdi);
+    }
+
+    // Execute query and get results
+    $data['rps_list'] = $query->get()->getResult();
+
+    // Add search parameters to data array for maintaining form state
+    $data['search_mata_kuliah'] = $searchMataKuliah;
+    $data['search_prodi'] = $searchProdi;
 
     return view('dosen/daftar_upload', $data);
   }

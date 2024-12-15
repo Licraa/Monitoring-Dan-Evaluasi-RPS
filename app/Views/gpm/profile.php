@@ -1,47 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profil</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="profil.css">
+    <link rel="stylesheet" href="<?= base_url('/css/profil_gpm.css') ?>">
 </head>
+
 <body>
     <div class="dashboard-container">
         <!-- Sidebar -->
         <nav class="sidebar">
             <div class="sidebar-header-judul">
-                <p>MONEV RPS</p> 
+                <p>MONEV RPS</p>
             </div>
             <div class="sidebar-header">
                 <p>Tahun Ajaran : 2024/2025 Ganjil</p>
             </div>
-            <a href="halamanutama.html" class="menu-item">
+            <a href="<?= base_url('/gpm') ?>" class="menu-item">
                 <i class="bi bi-speedometer2"></i><span>Halaman Utama</span>
             </a>
-            <a href="gpm.html" class="menu-item active">
-                <i class="bi bi-file-earmark"></i><span>RPS</span> 
+            <a href="<?= base_url('/dashboard/gpm_rps') ?>" class="menu-item">
+                <i class="bi bi-file-earmark"></i><span>RPS</span>
             </a>
-            <a href="notifikasi.html" class="menu-item">
-                <i class="bi bi-bell-fill"></i><span>Notifikasi</span> 
+            <a href="<?= base_url('/gpm/bap') ?>" class="menu-item ">
+                <i class="bi bi-file-earmark"></i><span>BAP</span>
             </a>
-            <a href="#" class="menu-item">
-                <i class="bi bi-box-arrow-left"></i><span>Keluar</span> 
+            <a href="<?= base_url('/gpm/notifikasi') ?>" class="menu-item">
+                <i class="bi bi-bell-fill"></i><span>Notifikasi</span>
+            </a>
+            <a href="<?= base_url('/gpm/logout') ?>" class="menu-item">
+                <i class="bi bi-box-arrow-left"></i><span>Keluar</span>
             </a>
         </nav>
-        
+
         <div class="admin-info">
             <span class="toggle-sidebar">&#9776;</span>
-            
+
             <!-- Right-aligned container for profile and notification icons -->
             <div class="right-icons">
-                <a href="profile.html" class="profile-link">
-                    <span class="admin-name">Nama Dosen</span>
+                <a href="<?= base_url('/gpm/profile') ?>" class="profile-link">
+                    <span class="admin-name"><?= user()->username ?></span>
                     <i class="bi bi-person-fill"></i>
                 </a>
-                <a href="notifikasi-rps.html" class="notif">
+                <a href="<?= base_url('/gpm/notifikasi') ?>" class="notif">
                     <i class="bi bi-bell-fill"></i>
                 </a>
             </div>
@@ -50,14 +55,14 @@
         <!-- Main content -->
         <div class="admin-info">
             <span class="toggle-sidebar">&#9776;</span>
-            
+
             <!-- Right-aligned container for profile and notification icons -->
             <div class="right-icons">
-                <a href="profile.html" class="profile-link">
-                    <span class="admin-name">Nama Dosen</span>
+                <a href="<?= base_url('/gpm/profile') ?>" class="profile-link">
+                    <span class="admin-name"><?= user()->username ?></span>
                     <i class="bi bi-person-fill"></i>
                 </a>
-                <a href="notifikasi-rps.html" class="notif">
+                <a href="<?= base_url('/gpm/notifikasi') ?>" class="notif">
                     <i class="bi bi-bell-fill"></i>
                 </a>
             </div>
@@ -114,9 +119,10 @@
     <footer class="footer">
         <p>&copy; 2024 Fakultas Teknik. All rights reserved.</p>
     </footer>
-    <script src="script.js"></script>
+    <script src="<?= base_url('/js/gpm.js') ?>"></script>
 
     <!-- Scripts for Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

@@ -22,20 +22,20 @@
             <div class="sidebar-header">
                 <p>Tahun Ajaran : 2024/2025 Ganjil</p>
             </div>
-            <a href="<?= base_url('/dashboard/gpm_rps') ?>" class="menu-item">
+            <a href="<?= base_url('/gpm') ?>" class="menu-item">
                 <i class="bi bi-speedometer2"></i><span>Halaman Utama</span>
             </a>
-            <a href="<?= base_url('/dashboard/gpm_rps') ?>" class="menu-item active">
+            <a href="<?= base_url('/dashboard/gpm_rps') ?>" class="menu-item">
                 <i class="bi bi-file-earmark"></i><span>RPS</span>
             </a>
-            <a href="/gpm/notifikasi" class="menu-item">
-                <i class="bi bi-bell-fill"></i><span>Notifikasi</span>
-            </a>
-            <a href="<?= base_url('/gpm/bap') ?>" class="menu-item">
+            <a href="<?= base_url('/gpm/bap') ?>" class="menu-item ">
                 <i class="bi bi-file-earmark"></i><span>BAP</span>
             </a>
-            <a href="/logout" class="menu-item">
-                <i class="bi bi-box-arrow-left"></i><span>Logout</span>
+            <a href="<?= base_url('/gpm/notifikasi') ?>" class="menu-item">
+                <i class="bi bi-bell-fill"></i><span>Notifikasi</span>
+            </a>
+            <a href="<?= base_url('/gpm/logout') ?>" class="menu-item">
+                <i class="bi bi-box-arrow-left"></i><span>Keluar</span>
             </a>
         </nav>
 
@@ -60,36 +60,7 @@
                 <h1 class="h4">Home / RPS</h1>
             </header>
             <div class="content-wrapper">
-                <!-- Ringkasan Rekap Laporan -->
-                <div id="rekapLaporan" class="container section" style="background-color: #f8f9fa; padding: 20px; border-radius: 8px;">
-                    <h4>Rekap Laporan</h4>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="card custom-card">
-                                <div class="card-body">
-                                    <h5 class="card-title">RPS Proses</h5>
-                                    <p class="card-text">30</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card custom-card">
-                                <div class="card-body">
-                                    <h5 class="card-title">RPS Selesai</h5>
-                                    <p class="card-text">90</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card custom-card">
-                                <div class="card-body">
-                                    <h5 class="card-title">Total RPS</h5>
-                                    <p class="card-text">120</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
                 <!-- Data RPS -->
                 <div id="rps" class="container section">
                     <h4>Data RPS</h4>

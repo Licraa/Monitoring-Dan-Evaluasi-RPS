@@ -9,11 +9,11 @@
 
     <!-- Right-aligned container for profile and notification icons -->
     <div class="right-icons">
-        <a href="dosen/profile" class="profile-link">
+        <a href="<?= base_url('dosen/profile') ?>" class="profile-link">
             <span class="admin-name"><?php echo user()->username ?></span>
             <i class="bi bi-person-fill"></i>
         </a>
-        <a href="dosen/notifikasi-rps" class="notif">
+        <a href="<?= base_url('dosen/notifikasi-rps') ?>" class="notif">
             <i class="bi bi-bell-fill"></i>
         </a>
     </div>
@@ -31,7 +31,7 @@
         <div class="row justify-content-center">
             <!-- Unggah RPS -->
             <div class="col-md-3">
-                <a href="dosen/unggah-rps" class="custom-card-link">
+                <a href="<?= base_url('dosen/unggah-rps') ?>" class="custom-card-link">
                     <div class="custom-card">
                         <i class="bi bi-file-earmark-arrow-up-fill card-icon"></i>
                         <div class="card-header">
@@ -43,7 +43,7 @@
 
             <!-- Status BAP -->
             <div class="col-md-3">
-                <a href="dosen/isi-bap" class="custom-card-link">
+                <a href="<?= base_url('dosen/isi_bap') ?>" class="custom-card-link">
                     <div class="custom-card">
                         <i class="bi bi-file-earmark-pdf-fill card-icon"></i>
                         <div class="card-header">
@@ -55,7 +55,7 @@
 
             <!-- Feedback RPS -->
             <div class="col-md-3">
-                <a href="dosen/feedback" class="custom-card-link">
+                <a href="<?= base_url('dosen/feedback') ?>" class="custom-card-link">
                     <div class="custom-card bg-icon-feedback-box">
                         <div class="card-header">
                             <span class="card-name">Feedback RPS</span>
@@ -66,7 +66,7 @@
 
             <!-- Notifikasi -->
             <div class="col-md-3">
-                <a href="dosen/notifikasi-rps" class="custom-card-link">
+                <a href="<?= base_url('dosen/notifikasi_rps') ?>" class="custom-card-link">
                     <div class="custom-card">
                         <i class="bi bi-bell-fill card-icon"></i>
                         <div class="card-header">

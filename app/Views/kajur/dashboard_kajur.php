@@ -20,13 +20,16 @@
       <div class="sidebar-header">
         <p>Tahun Ajaran : 2024/2025 Ganjil</p>
       </div>
-      <a href="#" class="menu-item active">
+      <a href="<?= base_url('/kajur') ?>" class="menu-item">
         <i class="bi bi-speedometer2"></i><span>Halaman Utama</span>
       </a>
-      <a href="<?= base_url('dashboard/gpm_rps') ?>" class="menu-item">
+      <a href="<?= base_url('/dashboard/gpm_rps') ?>" class="menu-item">
         <i class="bi bi-file-earmark"></i><span>RPS</span>
       </a>
-      <a href="#" class="menu-item">
+      <a href="<?= base_url('/gpm/bap') ?>" class="menu-item">
+        <i class="bi bi-file-earmark"></i><span>BAP</span>
+      </a>
+      <a href="<?= base_url('/gpm/notifikasi') ?>" class="menu-item">
         <i class="bi bi-bell-fill"></i><span>Notifikasi</span>
       </a>
       <a href="#" class="menu-item">
@@ -39,11 +42,11 @@
 
       <!-- Right-aligned container for profile and notification icons -->
       <div class="right-icons">
-        <a href="profile.html" class="profile-link">
+        <a href="<?= base_url('/gpm/profile') ?>" class="profile-link">
           <span class="admin-name"><?= user()->username ?></span>
           <i class="bi bi-person-fill"></i>
         </a>
-        <a href="notifikasi-rps.html" class="notif">
+        <a href="<?= base_url('/gpm/notifikasi') ?>" class="notif">
           <i class="bi bi-bell-fill"></i>
         </a>
       </div>

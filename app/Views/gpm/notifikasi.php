@@ -1,48 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Notifikasi</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="dosen.css">
-    <link rel="stylesheet" href="notifikasi.css">
+    <link rel="stylesheet" href="/css/gpm.css">
+    <link rel="stylesheet" href="/css/notifikasi_gpm.css">
 </head>
+
 <body>
     <div class="dashboard-container">
         <!-- Sidebar -->
         <nav class="sidebar">
             <div class="sidebar-header-judul">
-                <p>MONEV RPS</p> 
+                <p>MONEV RPS</p>
             </div>
             <div class="sidebar-header">
                 <p>Tahun Ajaran : 2024/2025 Ganjil</p>
             </div>
-            <a href="halamanutama.html" class="menu-item">
+            <a href="<?= base_url('/gpm') ?>" class="menu-item">
                 <i class="bi bi-speedometer2"></i><span>Halaman Utama</span>
             </a>
-            <a href="gpm.html" class="menu-item active">
-                <i class="bi bi-file-earmark"></i><span>RPS</span> 
+            <a href="<?= base_url('/dashboard/gpm_rps') ?>" class="menu-item">
+                <i class="bi bi-file-earmark"></i><span>RPS</span>
             </a>
-            <a href="notifikasi.html" class="menu-item">
-                <i class="bi bi-bell-fill"></i><span>Notifikasi</span> 
+            <a href="<?= base_url('/gpm/bap') ?>" class="menu-item ">
+                <i class="bi bi-file-earmark"></i><span>BAP</span>
             </a>
-            <a href="#" class="menu-item">
-                <i class="bi bi-box-arrow-left"></i><span>Keluar</span> 
+            <a href="<?= base_url('/gpm/notifikasi') ?>" class="menu-item">
+                <i class="bi bi-bell-fill"></i><span>Notifikasi</span>
+            </a>
+            <a href="<?= base_url('/gpm/logout') ?>" class="menu-item">
+                <i class="bi bi-box-arrow-left"></i><span>Keluar</span>
             </a>
         </nav>
-        
+
         <div class="admin-info">
             <span class="toggle-sidebar">&#9776;</span>
-            
+
             <!-- Right-aligned container for profile and notification icons -->
             <div class="right-icons">
-                <a href="profile.html" class="profile-link">
-                    <span class="admin-name">Nama Dosen</span>
+                <a href="/gpm/profile" class="profile-link">
+                    <span class="admin-name"><?= user()->username ?></span>
                     <i class="bi bi-person-fill"></i>
                 </a>
-                <a href="notifikasi-rps.html" class="notif">
+                <a href="/gpm/notifikasi" class="notif">
                     <i class="bi bi-bell-fill"></i>
                 </a>
             </div>
@@ -51,14 +56,14 @@
         <!-- Main content -->
         <div class="admin-info">
             <span class="toggle-sidebar">&#9776;</span>
-            
+
             <!-- Right-aligned container for profile and notification icons -->
             <div class="right-icons">
-                <a href="profile.html" class="profile-link">
-                    <span class="admin-name">Nama Dosen</span>
+                <a href="/gpm/profile" class="profile-link">
+                    <span class="admin-name"><?= user()->username ?></span>
                     <i class="bi bi-person-fill"></i>
                 </a>
-                <a href="notifikasi-rps.html" class="notif">
+                <a href="/gpm/notifikasi" class="notif">
                     <i class="bi bi-bell-fill"></i>
                 </a>
             </div>
@@ -66,11 +71,11 @@
 
         <div class="main-content">
             <!-- Administrator Info Container -->
-            
+
             <header class="main-header">
                 <h1 class="h4">Home / Notifikasi</h1>
             </header>
-            
+
             <!-- Notification List -->
             <div class="container-fluid">
                 <div class="card">
@@ -83,7 +88,7 @@
                             <button id="deleteSelected" class="btn-red ms-2 d-flex align-items-center">
                                 <i class="bi bi-trash3-fill me-2"></i> <span class="delete-text">Hapus</span>
                             </button>
-                            <div class="input-group ms-2" style="margin-left: auto;"> 
+                            <div class="input-group ms-2" style="margin-left: auto;">
                                 <i class="bi bi-search input-group-text search-icon"></i>
                                 <input type="text" id="searchInput" class="form-control" placeholder="Cari Notifikasi" style="width: 150px;" autocomplete="off">
                                 <ul class="dropdown-menu" id="searchDropdown" style="display: none;"></ul>
@@ -120,7 +125,7 @@
                         </ul>
                     </div>
                 </div>
-            </div>    
+            </div>
         </div>
     </div>
 
@@ -131,7 +136,7 @@
 
     <script>
         // Convert timestamps to "time ago" format
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             function updateTimeAgo() {
                 document.querySelectorAll('.time').forEach(element => {
                     const timeString = element.getAttribute('data-time');
@@ -159,10 +164,10 @@
 
             updateTimeAgo();
             setInterval(updateTimeAgo, 60000); // Update every minute
-            
+
             // Handle dropdown filter actions
             document.querySelectorAll('.dropdown-item').forEach(item => {
-                item.addEventListener('click', function (e) {
+                item.addEventListener('click', function(e) {
                     e.preventDefault();
                     const filter = this.getAttribute('data-filter');
                     document.querySelectorAll('.list-group-item.notification').forEach(notification => {
@@ -184,8 +189,8 @@
                                     notification.style.backgroundColor = '';
                                 }
                                 break;
-                            case 'none': 
-                                notification.style.backgroundColor = ''; 
+                            case 'none':
+                                notification.style.backgroundColor = '';
                                 break;
                         }
                     });
@@ -195,15 +200,15 @@
             });
 
             // Toggle dropdown visibility
-            document.getElementById('dropdownToggle').addEventListener('click', function () {
+            document.getElementById('dropdownToggle').addEventListener('click', function() {
                 const dropdownMenu = document.getElementById('dropdownMenu');
                 dropdownMenu.style.display = dropdownMenu.style.display === 'none' ? 'block' : 'none';
             });
 
             const selectAllCheckbox = document.getElementById('selectAllCheckbox');
             if (selectAllCheckbox) {
-                selectAllCheckbox.addEventListener('click', function (e) {
-                    e.stopPropagation(); 
+                selectAllCheckbox.addEventListener('click', function(e) {
+                    e.stopPropagation();
                     const checkboxes = document.querySelectorAll('.select-notif');
                     checkboxes.forEach(checkbox => {
                         checkbox.checked = this.checked;
@@ -218,7 +223,7 @@
             }
 
             document.querySelectorAll('.list-group-item.notification').forEach(notification => {
-                notification.addEventListener('click', function () {
+                notification.addEventListener('click', function() {
                     // Mark notification as read
                     this.classList.remove('unread');
                     this.classList.add('read');
@@ -232,11 +237,11 @@
             });
 
             document.querySelectorAll('.select-notif').forEach(checkbox => {
-                checkbox.addEventListener('change', function () {
+                checkbox.addEventListener('change', function() {
                     const notificationItem = this.closest('.list-group-item.notification');
                     if (this.checked) {
                         notificationItem.classList.add('selected');
-                        notificationItem.style.backgroundColor = '#d0e7ff'; 
+                        notificationItem.style.backgroundColor = '#d0e7ff';
                     } else {
                         notificationItem.classList.remove('selected');
                         notificationItem.style.backgroundColor = '';
@@ -246,7 +251,7 @@
 
             const deleteButton = document.getElementById('deleteSelected');
             if (deleteButton) {
-                deleteButton.addEventListener('click', function () {
+                deleteButton.addEventListener('click', function() {
                     const selectedNotifications = document.querySelectorAll('.list-group-item.notification.selected');
                     selectedNotifications.forEach(notification => notification.remove());
                 });
@@ -254,18 +259,18 @@
 
             function truncateMessages() {
                 document.querySelectorAll('.message-content').forEach(element => {
-                    const fullMessage = element.getAttribute('data-full-message'); 
-                    const containerWidth = element.offsetWidth; 
+                    const fullMessage = element.getAttribute('data-full-message');
+                    const containerWidth = element.offsetWidth;
                     const textWidth = element.scrollWidth;
 
                     if (textWidth > containerWidth) {
                         let truncatedMessage = fullMessage; // Start with the full message
                         while (element.scrollWidth > containerWidth && truncatedMessage.length > 0) {
-                            truncatedMessage = truncatedMessage.slice(0, -1); 
-                            element.textContent = `${truncatedMessage.trim()}...`; 
+                            truncatedMessage = truncatedMessage.slice(0, -1);
+                            element.textContent = `${truncatedMessage.trim()}...`;
                         }
                     } else {
-                        element.textContent = fullMessage; 
+                        element.textContent = fullMessage;
                     }
                 });
             }
@@ -277,7 +282,7 @@
             const searchDropdown = document.getElementById('searchDropdown');
             const notifications = Array.from(document.querySelectorAll('.list-group-item.notification'));
 
-            searchInput.addEventListener('input', function () {
+            searchInput.addEventListener('input', function() {
                 const query = this.value.toLowerCase();
                 searchDropdown.innerHTML = ''; // Clear previous results
 
@@ -297,10 +302,10 @@
                         const messageContent = notification.querySelector('.message-content').textContent;
                         const highlightedSender = senderName.replace(new RegExp(`(${query})`, 'gi'), '<strong>$1</strong>');
                         const highlightedMessage = messageContent.replace(new RegExp(`(${query})`, 'gi'), '<strong>$1</strong>');
-                        
+
                         listItem.innerHTML = `${highlightedSender}: ${highlightedMessage}`; // Combine sender and message
 
-                        listItem.addEventListener('click', function () {
+                        listItem.addEventListener('click', function() {
                             searchInput.value = messageContent; // Set input to selected item
                             searchDropdown.style.display = 'none'; // Hide dropdown
                         });
@@ -318,17 +323,18 @@
             });
 
             // Hide dropdown when clicking outside
-            document.addEventListener('click', function (e) {
+            document.addEventListener('click', function(e) {
                 if (!searchInput.contains(e.target) && !searchDropdown.contains(e.target)) {
                     searchDropdown.style.display = 'none';
                 }
             });
         });
     </script>
-    
-    <script src="dosen.js"></script>
+
+    <script src="/js/gpm.js"></script>
 
     <!-- Scripts for Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

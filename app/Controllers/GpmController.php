@@ -256,4 +256,14 @@ class GpmController extends BaseController
       ]);
     }
   }
+
+  public function profile()
+  {
+    return view('gpm/profile');
+  }
+
+  public function notifikasi()
+  {
+    return view('gpm/notifikasi');
+  }
 }

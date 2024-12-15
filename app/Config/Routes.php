@@ -73,3 +73,5 @@ $routes->post('gpm/save-review', 'GpmController::saveReview', ['filter' => 'role
 $routes->get('gpm/bap', 'GpmController::bap', ['filter' => 'role:gpm,kajur']);
 $routes->get('gpm/bap/(:num)', 'GpmController::bap_detail/$1', ['filter' => 'role:gpm,kajur']);
 $routes->get('gpm/get-bap-details/(:num)', 'GpmController::getBapDetails/$1', ['filter' => 'role:gpm,kajur']);
+$routes->get('gpm/profile', 'GpmController::profile', ['filter' => 'role:gpm,kajur']);
+$routes->get('gpm/notifikasi', 'GpmController::notifikasi', ['filter' => 'role:gpm,kajur']);

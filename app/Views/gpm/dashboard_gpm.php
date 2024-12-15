@@ -20,34 +20,34 @@
       <div class="sidebar-header">
         <p>Tahun Ajaran : 2024/2025 Ganjil</p>
       </div>
-      <a href="<?= base_url('/dashboard/gpm_rps') ?>" class="menu-item active">
+      <a href="<?= base_url('/gpm') ?>" class="menu-item">
         <i class="bi bi-speedometer2"></i><span>Halaman Utama</span>
       </a>
       <a href="<?= base_url('/dashboard/gpm_rps') ?>" class="menu-item">
         <i class="bi bi-file-earmark"></i><span>RPS</span>
       </a>
+      <a href="<?= base_url('/gpm/bap') ?>" class="menu-item ">
+        <i class="bi bi-file-earmark"></i><span>BAP</span>
+      </a>
       <a href="<?= base_url('/gpm/notifikasi') ?>" class="menu-item">
         <i class="bi bi-bell-fill"></i><span>Notifikasi</span>
       </a>
-      <a href="<?= base_url('/gpm/bap') ?>" class="menu-item">
-        <i class="bi bi-file-earmark"></i><span>BAP</span>
-      </a>
-
-      <a href="<?= base_url('/logout') ?>" class="menu-item">
-        <i class="bi bi-box-arrow-left"></i><span>Logout</span>
+      <a href="<?= base_url('/gpm/logout') ?>" class="menu-item">
+        <i class="bi bi-box-arrow-left"></i><span>Keluar</span>
       </a>
     </nav>
+
 
     <div class="admin-info">
       <span class="toggle-sidebar">&#9776;</span>
 
       <!-- Right-aligned container for profile and notification icons -->
       <div class="right-icons">
-        <a href="profile.html" class="profile-link">
-          <span class="admin-name">Nama Dosen</span>
+        <a href="<?= base_url('/gpm/profile') ?>" class="profile-link">
+          <span class="admin-name"><?= user()->username ?></span>
           <i class="bi bi-person-fill"></i>
         </a>
-        <a href="notifikasi-rps.html" class="notif">
+        <a href="<?= base_url('/gpm/notifikasi') ?>" class="notif">
           <i class="bi bi-bell-fill"></i>
         </a>
       </div>
@@ -77,7 +77,7 @@
               <div class="custom-card">
                 <i class="bi bi-bell-fill card-icon"></i>
                 <div class="card-header">
-                  <a href="#" class="card-name">
+                  <a href="<?= base_url('/gpm/notifikasi') ?>" class="card-name">
                     <span>Notifikasi</span>
                   </a>
                 </div>
@@ -92,7 +92,7 @@
   <footer class="footer">
     <p>&copy; 2024 Fakultas Teknik. All rights reserved.</p>
   </footer>
-  <script src="<?= base_url('js/gpm.js') ?>"></script>
+  <script src="<?= base_url('/js/gpm.js') ?>"></script>
 </body>
 
 </html>

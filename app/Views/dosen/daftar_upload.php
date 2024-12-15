@@ -75,14 +75,14 @@
       <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center mb-3">
           <div class="input-group input-group-container">
-            <select class="form-select" aria-label="Select Mata Kuliah">
-              <option selected disabled>Pilih Mata Kuliah</option>
+            <select class="form-select" id="searchMataKuliah" aria-label="Select Mata Kuliah">
+              <option selected value="">Pilih Mata Kuliah</option>
               <?php foreach ($mata_kuliah as $mk): ?>
                 <option value="<?= $mk->kode_mk ?>"><?= $mk->nama_mk ?></option>
               <?php endforeach; ?>
             </select>
-            <select class="form-select" aria-label="Select Prodi">
-              <option selected disabled>Pilih Prodi</option>
+            <select class="form-select" id="searchProdi" aria-label="Select Prodi">
+              <option selected value="">Pilih Prodi</option>
               <?php foreach ($prodi as $p): ?>
                 <option value="<?= $p->id ?>"><?= $p->nama_jurusan ?></option>
               <?php endforeach; ?>
@@ -256,6 +256,42 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      // Set nilai dropdown sesuai parameter URL saat halaman dimuat
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('mata_kuliah')) {
+        document.getElementById('searchMataKuliah').value = urlParams.get('mata_kuliah');
+      }
+      if (urlParams.has('prodi')) {
+        document.getElementById('searchProdi').value = urlParams.get('prodi');
+      }
+
+      // Handle search functionality
+      document.getElementById('searchButton').addEventListener('click', function() {
+        const mataKuliah = document.getElementById('searchMataKuliah').value;
+        const prodi = document.getElementById('searchProdi').value;
+
+        // Buat URL dengan parameter pencarian
+        const searchParams = new URLSearchParams();
+        if (mataKuliah) searchParams.append('mata_kuliah', mataKuliah);
+        if (prodi) searchParams.append('prodi', prodi);
+
+        // Redirect ke halaman yang sama dengan parameter pencarian
+        window.location.href = `${window.location.pathname}?${searchParams.toString()}`;
+      });
+
+      // Tambahkan event listener untuk tombol Enter pada dropdown
+      document.getElementById('searchMataKuliah').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          document.getElementById('searchButton').click();
+        }
+      });
+
+      document.getElementById('searchProdi').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          document.getElementById('searchButton').click();
+        }
+      });
+
       // Handle prodi change to update mata kuliah dropdown
       document.getElementById('editProdi').addEventListener('change', function() {
         const prodiId = this.value;
