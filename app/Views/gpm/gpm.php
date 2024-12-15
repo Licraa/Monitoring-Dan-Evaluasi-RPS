@@ -35,7 +35,7 @@
                 <i class="bi bi-file-earmark"></i><span>BAP</span>
             </a>
             <a href="/logout" class="menu-item">
-                <i class="bi bi-box-arrow-left"></i><span>Logout</span>
+                <i class="bi bi-box-arrow-left"></i><span>Keluar</span>
             </a>
         </nav>
 
