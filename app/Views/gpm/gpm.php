@@ -34,7 +34,7 @@
             <a href="<?= base_url('/gpm/notifikasi') ?>" class="menu-item">
                 <i class="bi bi-bell-fill"></i><span>Notifikasi</span>
             </a>
-            <a href="<?= base_url('/gpm/logout') ?>" class="menu-item">
+            <a href="<?= base_url('/logout') ?>" class="menu-item">
                 <i class="bi bi-box-arrow-left"></i><span>Keluar</span>
             </a>
         </nav>
