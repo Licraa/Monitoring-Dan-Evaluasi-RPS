@@ -7,8 +7,8 @@
     <title>Profil</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="dosen.css">
-    <link rel="stylesheet" href="profil.css">
+    <link rel="stylesheet" href="<?= base_url('/css/dosen copy.css') ?>">
+    <link rel="stylesheet" href="<?= base_url('/css/profil.css') ?>">
 </head>
 
 <body>
@@ -119,7 +119,7 @@
         <p>&copy; 2024 Fakultas Teknik. All rights reserved.</p>
     </footer>
 
-    <script src="dosen.js"></script>
+    <script src="<?= base_url('/js/dosen.js') ?>"></script>
 
     <!-- Scripts for Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
