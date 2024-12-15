@@ -31,10 +31,14 @@
             <a href="<?= base_url('/gpm/bap') ?>" class="menu-item ">
                 <i class="bi bi-file-earmark"></i><span>BAP</span>
             </a>
+<<<<<<< HEAD
             <a href="<?= base_url('/gpm/notifikasi') ?>" class="menu-item">
                 <i class="bi bi-bell-fill"></i><span>Notifikasi</span>
             </a>
             <a href="<?= base_url('/gpm/logout') ?>" class="menu-item">
+=======
+            <a href="/logout" class="menu-item">
+>>>>>>> cb509e869fdc6a620dca8bdf076700d9ae21aae5
                 <i class="bi bi-box-arrow-left"></i><span>Keluar</span>
             </a>
         </nav>
