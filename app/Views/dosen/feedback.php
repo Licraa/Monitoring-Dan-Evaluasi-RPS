@@ -61,7 +61,7 @@
                     <i class="bi bi-person-fill"></i>
                 </a>
 
-                <a href="<?= base_url('/dosen/notifikasi') ?>" class="notif">
+                <a href="<?= base_url('/dosen/notifikasi_rps') ?>" class="notif">
                     <i class="bi bi-bell-fill"></i>
                 </a>
             </div>

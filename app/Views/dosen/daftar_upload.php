@@ -42,7 +42,7 @@
       <a href="/dosen/feedback" class="menu-item">
         <img src="/img/feedback.png" alt="Feedback Icon" class="feedback-icon"><span>Feedback RPS</span>
       </a>
-      <a href="/dosen/notifikasi-rps" class="menu-item">
+      <a href="/dosen/notifikasi_rps" class="menu-item">
         <i class="bi bi-bell-fill"></i><span>Notifikasi</span>
       </a>
       <a href="/logout" class="menu-item">
@@ -59,10 +59,10 @@
       <!-- Right-aligned container for profile and notification icons -->
       <div class="right-icons">
         <a href="<?= base_url('/dosen/profile') ?>" class="profile-link">
-          <span class="admin-name">Nama Dosen</span>
+          <span class="admin-name"><?= user()->username ?></span>
           <i class="bi bi-person-fill"></i>
         </a>
-        <a href="<?= base_url('/dosen/notifikasi') ?>" class="notif">
+        <a href="<?= base_url('/dosen/notifikasi_rps') ?>" class="notif">
           <i class="bi bi-bell-fill"></i>
         </a>
       </div>
