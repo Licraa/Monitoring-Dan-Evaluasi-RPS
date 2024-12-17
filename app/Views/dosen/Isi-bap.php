@@ -43,7 +43,7 @@
             <a href="/dosen/feedback" class="menu-item">
                 <img src="/img/feedback.png" alt="Feedback Icon" class="feedback-icon"><span>Feedback RPS</span>
             </a>
-            <a href="/dosen/notifikasi-rps" class="menu-item">
+            <a href="/dosen/notifikasi_rps" class="menu-item">
                 <i class="bi bi-bell-fill"></i><span>Notifikasi</span>
             </a>
             <a href="/logout" class="menu-item">
